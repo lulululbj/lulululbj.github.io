@@ -10,19 +10,19 @@
 <title>Java 世界的盘古和女娲 —— Zygote - 路遥的博客</title>
 
 
-    <meta name="description" content="本文基于 Android 9.0 , 代码仓库地址 ： android_9.0.0_r45 文中源码链接： Zygote.java ZygoteInit.java ZygoteServer.java ZygoteConnection.java RuntimeInit.java  仔细看看下面这张 Android 体系图，找一下 Zygote 在什么地方。  上图来自 Gityuan 博客 。 纵">
+    <meta name="description" content="本文基于 Android 9.0 , 代码仓库地址 ： android_9.0.0_r45 文中源码链接： Zygote.java ZygoteInit.java ZygoteServer.java ZygoteConnection.java RuntimeInit.java">
 <meta name="keywords" content="Zygote">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java 世界的盘古和女娲 —— Zygote">
-<meta property="og:url" content="http://sunluyao.com/2019/10/09/hello-world/index.html">
+<meta property="og:url" content="http://sunluyao.com/2019/10/09/zygote/index.html">
 <meta property="og:site_name" content="路遥的博客">
-<meta property="og:description" content="本文基于 Android 9.0 , 代码仓库地址 ： android_9.0.0_r45 文中源码链接： Zygote.java ZygoteInit.java ZygoteServer.java ZygoteConnection.java RuntimeInit.java  仔细看看下面这张 Android 体系图，找一下 Zygote 在什么地方。  上图来自 Gityuan 博客 。 纵">
+<meta property="og:description" content="本文基于 Android 9.0 , 代码仓库地址 ： android_9.0.0_r45 文中源码链接： Zygote.java ZygoteInit.java ZygoteServer.java ZygoteConnection.java RuntimeInit.java">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://sunluyao.com/images/og_image.png">
-<meta property="og:updated_time" content="2019-10-09T02:17:29.641Z">
+<meta property="og:updated_time" content="2019-10-09T03:07:31.592Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java 世界的盘古和女娲 —— Zygote">
-<meta name="twitter:description" content="本文基于 Android 9.0 , 代码仓库地址 ： android_9.0.0_r45 文中源码链接： Zygote.java ZygoteInit.java ZygoteServer.java ZygoteConnection.java RuntimeInit.java  仔细看看下面这张 Android 体系图，找一下 Zygote 在什么地方。  上图来自 Gityuan 博客 。 纵">
+<meta name="twitter:description" content="本文基于 Android 9.0 , 代码仓库地址 ： android_9.0.0_r45 文中源码链接： Zygote.java ZygoteInit.java ZygoteServer.java ZygoteConnection.java RuntimeInit.java">
 <meta name="twitter:image" content="http://sunluyao.com/images/og_image.png">
 
 
@@ -69,7 +69,7 @@
     <link rel="stylesheet" href="/css/progressbar.css">
 <script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
     
-    
+    <script async="" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
     
 
 
@@ -151,9 +151,14 @@
                 <span class="level-item has-text-grey">
                     
                     
-                    32 分钟 读完 (大约 4868 个字)
+                    32 分钟 读完 (大约 4869 个字)
                 </span>
                 
+                
+                <span class="level-item has-text-grey" id="busuanzi_container_page_pv">
+                    <i class="far fa-eye"></i>
+                    <span id="busuanzi_value_page_pv">0</span> 次访问
+                </span>
                 
             </div>
         </div>
@@ -173,6 +178,8 @@
 <p><a href="https://github.com/lulululbj/android_9.0.0_r45/blob/master/frameworks/base/core/java/com/android/internal/os/ZygoteConnection.java" target="_blank" rel="noopener">ZygoteConnection.java</a></p>
 <p><a href="https://github.com/lulululbj/android_9.0.0_r45/blob/master/frameworks/base/core/java/com/android/internal/os/RuntimeInit.java" target="_blank" rel="noopener">RuntimeInit.java</a></p>
 </blockquote>
+<a id="more"></a>
+
 <p>仔细看看下面这张 Android 体系图，找一下 <code>Zygote</code> 在什么地方。</p>
 <p><img src="https://user-gold-cdn.xitu.io/2019/9/24/16d63d17a01415f4?w=1811&h=1588&f=jpeg&s=210189" alt></p>
 <p>上图来自 <a href="http://gityuan.com/android/" target="_blank" rel="noopener">Gityuan 博客</a> 。</p>
@@ -319,6 +326,20 @@
 
 
 
+<div class="card card-transparent">
+    <div class="level post-navigation is-flex-wrap is-mobile">
+        
+        <div class="level-start">
+            <a class="level level-item has-link-grey  article-nav-prev" href="/2019/10/09/handler/">
+                <i class="level-item fas fa-chevron-left"></i>
+                <span class="level-item">深入理解 Handler 消息机制</span>
+            </a>
+        </div>
+        
+        
+    </div>
+</div>
+
 
 </div>
                 
@@ -326,7 +347,7 @@
 
 
 
-<div class="column is-4-tablet is-4-desktop is-3-widescreen  has-order-1 column-left ">
+<div class="column is-4-tablet is-4-desktop is-3-widescreen  has-order-1 column-left is-sticky">
     
         
 <div class="card widget">
@@ -336,22 +357,22 @@
                 <div>
                     
                     <figure class="image is-128x128 has-mb-6">
-                        <img class="" src="/images/avatar.png" alt="Your name">
+                        <img class="" src="/images/avatar.png" alt="路遥">
                     </figure>
                     
                     <p class="is-size-4 is-block">
-                        Your name
+                        路遥
                     </p>
                     
                     
                     <p class="is-size-6 is-block">
-                        Your title
+                        luyao
                     </p>
                     
                     
                     <p class="is-size-6 is-flex is-flex-center has-text-grey">
                         <i class="fas fa-map-marker-alt has-mr-7"></i>
-                        <span>Your location</span>
+                        <span>China,Shanghai</span>
                     </p>
                     
                 </div>
@@ -364,7 +385,7 @@
                         文章
                     </p>
                     <p class="title has-text-weight-normal">
-                        1
+                        2
                     </p>
                 </div>
             </div>
@@ -384,14 +405,14 @@
                         标签
                     </p>
                     <p class="title has-text-weight-normal">
-                        1
+                        2
                     </p>
                 </div>
             </div>
         </nav>
         
         <div class="level">
-            <a class="level-item button is-link is-rounded" href="https://github.com/ppoffice" target="_blank">
+            <a class="level-item button is-link is-rounded" href="https://github.com/lulululbj" target="_blank">
                 关注我</a>
         </div>
         
@@ -400,7 +421,7 @@
         <div class="level is-mobile">
             
             <a class="level-item button is-white is-marginless" target="_blank"
-                title="Github" href="https://github.com/ppoffice">
+                title="Github" href="https://github.com/lulululbj">
                 
                 <i class="fab fa-github"></i>
                 
@@ -541,7 +562,7 @@
                 <span class="level-item">Android</span>
             </span>
             <span class="level-end">
-                <span class="level-item tag">1</span>
+                <span class="level-item tag">2</span>
             </span>
         </a><ul><li>
         <a class="level is-marginless" href="/categories/Android/AOSP/">
@@ -549,7 +570,7 @@
                 <span class="level-item">AOSP</span>
             </span>
             <span class="level-end">
-                <span class="level-item tag">1</span>
+                <span class="level-item tag">2</span>
             </span>
         </a></li></ul></li>
             </ul>
@@ -562,7 +583,7 @@
         <h3 class="menu-label">
             标签云
         </h3>
-        <a href="/tags/Zygote/" style="font-size: 10px;">Zygote</a>
+        <a href="/tags/Handler/" style="font-size: 10px;">Handler</a> <a href="/tags/Zygote/" style="font-size: 10px;">Zygote</a>
     </div>
 </div>
     
@@ -577,7 +598,26 @@
         
         <article class="media">
             
-            <a href="/2019/10/09/hello-world/" class="media-left">
+            <a href="/2019/10/09/handler/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="深入理解 Handler 消息机制">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-10-09T02:46:46.318Z">2019-10-09</time></div>
+                    <a href="/2019/10/09/handler/" class="title has-link-black-ter is-size-6 has-text-weight-normal">深入理解 Handler 消息机制</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/Android/">Android</a> / <a class="has-link-grey -link" href="/categories/Android/AOSP/">AOSP</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/10/09/zygote/" class="media-left">
                 <p class="image is-64x64">
                     <img class="thumbnail" src="/images/thumbnail.svg" alt="Java 世界的盘古和女娲 —— Zygote">
                 </p>
@@ -586,7 +626,7 @@
             <div class="media-content">
                 <div class="content">
                     <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-10-09T01:23:39.895Z">2019-10-09</time></div>
-                    <a href="/2019/10/09/hello-world/" class="title has-link-black-ter is-size-6 has-text-weight-normal">Java 世界的盘古和女娲 —— Zygote</a>
+                    <a href="/2019/10/09/zygote/" class="title has-link-black-ter is-size-6 has-text-weight-normal">Java 世界的盘古和女娲 —— Zygote</a>
                     <p class="is-size-7 is-uppercase">
                         <a class="has-link-grey -link" href="/categories/Android/">Android</a> / <a class="has-link-grey -link" href="/categories/Android/AOSP/">AOSP</a>
                     </p>
@@ -611,7 +651,7 @@
                     <span class="level-item">十月 2019</span>
                 </span>
                 <span class="level-end">
-                    <span class="level-item tag">1</span>
+                    <span class="level-item tag">2</span>
                 </span>
             </a>
         </li>
@@ -628,6 +668,13 @@
                 标签
             </h3>
             <div class="field is-grouped is-grouped-multiline">
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/Handler/">
+                        <span class="tag">Handler</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
                 
                 <div class="control">
                     <a class="tags has-addons" href="/tags/Zygote/">
@@ -660,7 +707,26 @@
         
         <article class="media">
             
-            <a href="/2019/10/09/hello-world/" class="media-left">
+            <a href="/2019/10/09/handler/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="深入理解 Handler 消息机制">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-10-09T02:46:46.318Z">2019-10-09</time></div>
+                    <a href="/2019/10/09/handler/" class="title has-link-black-ter is-size-6 has-text-weight-normal">深入理解 Handler 消息机制</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/Android/">Android</a> / <a class="has-link-grey -link" href="/categories/Android/AOSP/">AOSP</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/10/09/zygote/" class="media-left">
                 <p class="image is-64x64">
                     <img class="thumbnail" src="/images/thumbnail.svg" alt="Java 世界的盘古和女娲 —— Zygote">
                 </p>
@@ -669,7 +735,7 @@
             <div class="media-content">
                 <div class="content">
                     <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-10-09T01:23:39.895Z">2019-10-09</time></div>
-                    <a href="/2019/10/09/hello-world/" class="title has-link-black-ter is-size-6 has-text-weight-normal">Java 世界的盘古和女娲 —— Zygote</a>
+                    <a href="/2019/10/09/zygote/" class="title has-link-black-ter is-size-6 has-text-weight-normal">Java 世界的盘古和女娲 —— Zygote</a>
                     <p class="is-size-7 is-uppercase">
                         <a class="has-link-grey -link" href="/categories/Android/">Android</a> / <a class="has-link-grey -link" href="/categories/Android/AOSP/">AOSP</a>
                     </p>
@@ -694,7 +760,7 @@
                     <span class="level-item">十月 2019</span>
                 </span>
                 <span class="level-end">
-                    <span class="level-item tag">1</span>
+                    <span class="level-item tag">2</span>
                 </span>
             </a>
         </li>
@@ -711,6 +777,13 @@
                 标签
             </h3>
             <div class="field is-grouped is-grouped-multiline">
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/Handler/">
+                        <span class="tag">Handler</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
                 
                 <div class="control">
                     <a class="tags has-addons" href="/tags/Zygote/">
@@ -743,6 +816,14 @@
                 &copy; 2019 路遥&nbsp;
                 Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> & <a
                         href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank">Icarus</a>
+                
+                <br>
+				<span id="busuanzi_container_site_pv">
+                <span id="busuanzi_value_site_pv">0</span> 次访问
+                </span>
+                <span id="busuanzi_container_site_uv">
+                共 <span id="busuanzi_value_site_uv">0</span> 个访客
+                </span>
                 
                 </p>
             </div>
