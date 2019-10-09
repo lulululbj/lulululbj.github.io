@@ -73,6 +73,7 @@
 
 <link rel="stylesheet" href="/css/style.css">
 </head>
+<!-- <body class="is-3-column"> -->
 <body class="is-3-column">
     <nav class="navbar navbar-main">
     <div class="container">
@@ -143,10 +144,19 @@
 <div class="card">
     
     <div class="card-content article ">
+         <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2019/10/09/handler/">深入理解 Handler 消息机制</a>
+            
+        </h1>
         
         <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
             <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2019-10-09T02:46:46.318Z">2019-10-09</time>
+                <!-- <time class="level-item has-text-grey" datetime="2019-10-09T02:46:46.318Z">2019-10-09</time> -->
+                <time class="level-item has-text-grey" datetime="2019-10-09T02:46:46.318Z"><i class="far fa-calendar-alt">&nbsp;</i>2019-10-09</time>
+                <!-- 
+                <time class="level-item has-text-grey is-hidden-mobile" datetime="2019-10-09T06:52:35.950Z"><i class="far fa-calendar-check">&nbsp;</i>2019-10-09</time>
+                 -->
                 
                 <div class="level-item">
                 <a class="has-link-grey -link" href="/categories/Android/">Android</a>&nbsp;/&nbsp;<a class="has-link-grey -link" href="/categories/Android/AOSP/">AOSP</a>
@@ -163,17 +173,27 @@
             </div>
         </div>
         
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+        <!-- <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
             
                 <a class="has-link-black-ter" href="/2019/10/09/handler/">深入理解 Handler 消息机制</a>
             
-        </h1>
+        </h1> -->
         <div class="content">
             <p>记得很多年前的一次面试中，面试官问了这么一个问题，<code>你在项目中一般如何实现线程切换？</code> 他的本意应该是考察 RxJava 的使用，只是我的答案是 <code>Handler</code>，他也就没有再追问下去了。在早期 Android 开发的荒芜时代，Handler 的确承担了项目中大部分的线程切换工作，通常包括子线程更新 UI 和消息传递。不光在我们自己的应用中，在整个 Android 体系中，Handler 消息机制也是极其重要的，不亚于 Binder 的地位。 <code>ActivityThread.java</code> 中的内部类 <code>H</code> 就是一个 Handler，它内部定义了几十种消息类型来处理一些系统事件。</p>
         </div>
         
         
-        <div class="level is-mobile">
+        <!-- <div class="level is-mobile"> -->
+                    <hr style="height:1px;margin:1rem 0"/>
+                    <div class="level is-mobile is-flex">
+                        <div class="level-start">
+                            
+                            <div class="level-item is-size-7 is-uppercase">
+                                <i class="fas fa-tags has-text-grey"></i>&nbsp;
+                                <a class="has-link-grey -link" href="/tags/Handler/">Handler</a>
+                            </div>
+                            
+                        </div>
             <div class="level-start">
                 <div class="level-item">
                 <a class="button is-size-7 is-light" href="/2019/10/09/handler/#more">阅读更多</a>
@@ -198,7 +218,7 @@
 
 
 
-<div class="column is-4-tablet is-4-desktop is-3-widescreen  has-order-1 column-left is-sticky">
+<div class="column is-4-tablet is-4-desktop is-3-widescreen  has-order-1 column-left ">
     
         
 <div class="card widget">
@@ -229,42 +249,43 @@
                 </div>
             </div>
         </nav>
-        <nav class="level is-mobile">
+        <!-- <nav class="level is-mobile"> -->
+        <nav class="level menu-list is-mobile" style="margin-bottom:1rem">
             <div class="level-item has-text-centered is-marginless">
-                <div>
+                <a href="/archives/">
                     <p class="heading">
                         文章
                     </p>
                     <p class="title has-text-weight-normal">
                         2
                     </p>
-                </div>
+                </a>
             </div>
             <div class="level-item has-text-centered is-marginless">
-                <div>
+                <a href="/categories/">
                     <p class="heading">
                         分类
                     </p>
                     <p class="title has-text-weight-normal">
                         2
                     </p>
-                </div>
+                </a>
             </div>
             <div class="level-item has-text-centered is-marginless">
-                <div>
+                <a href="/tags/">
                     <p class="heading">
                         标签
                     </p>
                     <p class="title has-text-weight-normal">
                         2
                     </p>
-                </div>
+                </a>
             </div>
         </nav>
         
         <div class="level">
             <a class="level-item button is-link is-rounded" href="https://github.com/lulululbj" target="_blank">
-                关注我</a>
+                    <i class="fab fa-github"></i>&nbsp;&nbsp;关注我</a>
         </div>
         
         
@@ -313,7 +334,8 @@
     
         
     
-        <div class="card widget">
+        
+<div class="card widget">
     <div class="card-content">
         <div class="menu">
         <h3 class="menu-label">
@@ -348,8 +370,10 @@
     </div>
 </div>
 
+
     
         
+
 <div class="card widget">
     <div class="card-content">
         <div class="menu">
@@ -378,8 +402,10 @@
         </div>
     </div>
 </div>
+
     
-        <div class="card widget">
+        
+<div class="card widget">
     <div class="card-content">
         <h3 class="menu-label">
             标签云
@@ -387,6 +413,7 @@
         <a href="/tags/Handler/" style="font-size: 10px;">Handler</a> <a href="/tags/Zygote/" style="font-size: 10px;">Zygote</a>
     </div>
 </div>
+
     
     
         <div class="column-right-shadow is-hidden-widescreen ">
@@ -493,6 +520,7 @@
     
 </div>
 
+                
                 
 
 
@@ -601,6 +629,7 @@
     
 </div>
 
+                
             </div>
         </div>
     </section>

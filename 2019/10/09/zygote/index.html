@@ -19,7 +19,7 @@
 <meta property="og:description" content="本文基于 Android 9.0 , 代码仓库地址 ： android_9.0.0_r45 文中源码链接： Zygote.java ZygoteInit.java ZygoteServer.java ZygoteConnection.java RuntimeInit.java">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://sunluyao.com/images/og_image.png">
-<meta property="og:updated_time" content="2019-10-09T03:07:31.592Z">
+<meta property="og:updated_time" content="2019-10-09T06:55:55.210Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java 世界的盘古和女娲 —— Zygote">
 <meta name="twitter:description" content="本文基于 Android 9.0 , 代码仓库地址 ： android_9.0.0_r45 文中源码链接： Zygote.java ZygoteInit.java ZygoteServer.java ZygoteConnection.java RuntimeInit.java">
@@ -75,6 +75,7 @@
 
 <link rel="stylesheet" href="/css/style.css">
 </head>
+<!-- <body class="is-2-column"> -->
 <body class="is-3-column">
     <nav class="navbar navbar-main">
     <div class="container">
@@ -134,14 +135,23 @@
     <section class="section">
         <div class="container">
             <div class="columns">
-                <div class="column is-8-tablet is-8-desktop is-6-widescreen has-order-2 column-main">
+                <div class="column is-8-tablet is-8-desktop is-9-widescreen has-order-2 column-main">
 <div class="card">
     
     <div class="card-content article ">
+         <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                Java 世界的盘古和女娲 —— Zygote
+            
+        </h1>
         
         <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
             <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2019-10-09T01:23:39.895Z">2019-10-09</time>
+                <!-- <time class="level-item has-text-grey" datetime="2019-10-09T01:23:39.895Z">2019-10-09</time> -->
+                <time class="level-item has-text-grey" datetime="2019-10-09T01:23:39.895Z"><i class="far fa-calendar-alt">&nbsp;</i>2019-10-09</time>
+                <!-- 
+                <time class="level-item has-text-grey is-hidden-mobile" datetime="2019-10-09T06:55:55.210Z"><i class="far fa-calendar-check">&nbsp;</i>2019-10-09</time>
+                 -->
                 
                 <div class="level-item">
                 <a class="has-link-grey -link" href="/categories/Android/">Android</a>&nbsp;/&nbsp;<a class="has-link-grey -link" href="/categories/Android/AOSP/">AOSP</a>
@@ -163,11 +173,11 @@
             </div>
         </div>
         
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+        <!-- <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
             
                 Java 世界的盘古和女娲 —— Zygote
             
-        </h1>
+        </h1> -->
         <div class="content">
             <blockquote>
 <p>本文基于 Android 9.0 , 代码仓库地址 ： <a href="https://github.com/lulululbj/android_9.0.0_r45" target="_blank" rel="noopener">android_9.0.0_r45</a></p>
@@ -274,10 +284,12 @@
 
         </div>
         
+        <hr style="height:1px;margin:1rem 0"/>
         <div class="level is-size-7 is-uppercase">
             <div class="level-start">
                 <div class="level-item">
-                    <span class="is-size-6 has-text-grey has-mr-7">#</span>
+                    <!-- <span class="is-size-6 has-text-grey has-mr-7">#</span> -->
+                    <i class="fas fa-tags has-text-grey"></i>&nbsp;
                     <a class="has-link-grey -link" href="/tags/Zygote/">Zygote</a>
                 </div>
             </div>
@@ -347,7 +359,7 @@
 
 
 
-<div class="column is-4-tablet is-4-desktop is-3-widescreen  has-order-1 column-left is-sticky">
+<div class="column is-4-tablet is-4-desktop is-3-widescreen  has-order-1 column-left ">
     
         
 <div class="card widget">
@@ -378,42 +390,43 @@
                 </div>
             </div>
         </nav>
-        <nav class="level is-mobile">
+        <!-- <nav class="level is-mobile"> -->
+        <nav class="level menu-list is-mobile" style="margin-bottom:1rem">
             <div class="level-item has-text-centered is-marginless">
-                <div>
+                <a href="/archives/">
                     <p class="heading">
                         文章
                     </p>
                     <p class="title has-text-weight-normal">
                         2
                     </p>
-                </div>
+                </a>
             </div>
             <div class="level-item has-text-centered is-marginless">
-                <div>
+                <a href="/categories/">
                     <p class="heading">
                         分类
                     </p>
                     <p class="title has-text-weight-normal">
                         2
                     </p>
-                </div>
+                </a>
             </div>
             <div class="level-item has-text-centered is-marginless">
-                <div>
+                <a href="/tags/">
                     <p class="heading">
                         标签
                     </p>
                     <p class="title has-text-weight-normal">
                         2
                     </p>
-                </div>
+                </a>
             </div>
         </nav>
         
         <div class="level">
             <a class="level-item button is-link is-rounded" href="https://github.com/lulululbj" target="_blank">
-                关注我</a>
+                    <i class="fab fa-github"></i>&nbsp;&nbsp;关注我</a>
         </div>
         
         
@@ -461,7 +474,8 @@
 </div>
     
         
-<div class="card widget" id="toc">
+<!-- <div class="card widget" id="toc"> -->
+<div class="card widget column-left is-sticky" id="toc">
     <div class="card-content">
         <div class="menu">
             <h3 class="menu-label">
@@ -512,294 +526,14 @@
     </div>
 </div>
     
-        <div class="card widget">
-    <div class="card-content">
-        <div class="menu">
-        <h3 class="menu-label">
-            链接
-        </h3>
-        <ul class="menu-list">
-        
-            <li>
-                <a class="level is-mobile" href="https://hexo.io" target="_blank">
-                    <span class="level-left">
-                        <span class="level-item">Hexo</span>
-                    </span>
-                    <span class="level-right">
-                        <span class="level-item tag">hexo.io</span>
-                    </span>
-                </a>
-            </li>
-        
-            <li>
-                <a class="level is-mobile" href="https://github.com/ppoffice" target="_blank">
-                    <span class="level-left">
-                        <span class="level-item">PPOffice</span>
-                    </span>
-                    <span class="level-right">
-                        <span class="level-item tag">github.com</span>
-                    </span>
-                </a>
-            </li>
-        
-        </ul>
-        </div>
-    </div>
-</div>
-
-    
-        
-<div class="card widget">
-    <div class="card-content">
-        <div class="menu">
-            <h3 class="menu-label">
-                分类
-            </h3>
-            <ul class="menu-list">
-            <li>
-        <a class="level is-marginless" href="/categories/Android/">
-            <span class="level-start">
-                <span class="level-item">Android</span>
-            </span>
-            <span class="level-end">
-                <span class="level-item tag">2</span>
-            </span>
-        </a><ul><li>
-        <a class="level is-marginless" href="/categories/Android/AOSP/">
-            <span class="level-start">
-                <span class="level-item">AOSP</span>
-            </span>
-            <span class="level-end">
-                <span class="level-item tag">2</span>
-            </span>
-        </a></li></ul></li>
-            </ul>
-        </div>
-    </div>
-</div>
-    
-        <div class="card widget">
-    <div class="card-content">
-        <h3 class="menu-label">
-            标签云
-        </h3>
-        <a href="/tags/Handler/" style="font-size: 10px;">Handler</a> <a href="/tags/Zygote/" style="font-size: 10px;">Zygote</a>
-    </div>
-</div>
-    
     
         <div class="column-right-shadow is-hidden-widescreen ">
         
-            <div class="card widget">
-    <div class="card-content">
-        <h3 class="menu-label">
-            最新文章
-        </h3>
-        
-        <article class="media">
-            
-            <a href="/2019/10/09/handler/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="深入理解 Handler 消息机制">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-10-09T02:46:46.318Z">2019-10-09</time></div>
-                    <a href="/2019/10/09/handler/" class="title has-link-black-ter is-size-6 has-text-weight-normal">深入理解 Handler 消息机制</a>
-                    <p class="is-size-7 is-uppercase">
-                        <a class="has-link-grey -link" href="/categories/Android/">Android</a> / <a class="has-link-grey -link" href="/categories/Android/AOSP/">AOSP</a>
-                    </p>
-                </div>
-            </div>
-        </article>
-        
-        <article class="media">
-            
-            <a href="/2019/10/09/zygote/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Java 世界的盘古和女娲 —— Zygote">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-10-09T01:23:39.895Z">2019-10-09</time></div>
-                    <a href="/2019/10/09/zygote/" class="title has-link-black-ter is-size-6 has-text-weight-normal">Java 世界的盘古和女娲 —— Zygote</a>
-                    <p class="is-size-7 is-uppercase">
-                        <a class="has-link-grey -link" href="/categories/Android/">Android</a> / <a class="has-link-grey -link" href="/categories/Android/AOSP/">AOSP</a>
-                    </p>
-                </div>
-            </div>
-        </article>
-        
-    </div>
-</div>
-        
-            <div class="card widget">
-    <div class="card-content">
-        <div class="menu">
-        <h3 class="menu-label">
-            归档
-        </h3>
-        <ul class="menu-list">
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2019/10/">
-                <span class="level-start">
-                    <span class="level-item">十月 2019</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">2</span>
-                </span>
-            </a>
-        </li>
-        
-        </ul>
-        </div>
-    </div>
-</div>
-        
-            <div class="card widget">
-    <div class="card-content">
-        <div class="menu">
-            <h3 class="menu-label">
-                标签
-            </h3>
-            <div class="field is-grouped is-grouped-multiline">
-                
-                <div class="control">
-                    <a class="tags has-addons" href="/tags/Handler/">
-                        <span class="tag">Handler</span>
-                        <span class="tag is-grey">1</span>
-                    </a>
-                </div>
-                
-                <div class="control">
-                    <a class="tags has-addons" href="/tags/Zygote/">
-                        <span class="tag">Zygote</span>
-                        <span class="tag is-grey">1</span>
-                    </a>
-                </div>
-                
-            </div>
-        </div>
-    </div>
-</div>
-        
         </div>
     
 </div>
 
                 
-
-
-
-
-<div class="column is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only has-order-3 column-right ">
-    
-        <div class="card widget">
-    <div class="card-content">
-        <h3 class="menu-label">
-            最新文章
-        </h3>
-        
-        <article class="media">
-            
-            <a href="/2019/10/09/handler/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="深入理解 Handler 消息机制">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-10-09T02:46:46.318Z">2019-10-09</time></div>
-                    <a href="/2019/10/09/handler/" class="title has-link-black-ter is-size-6 has-text-weight-normal">深入理解 Handler 消息机制</a>
-                    <p class="is-size-7 is-uppercase">
-                        <a class="has-link-grey -link" href="/categories/Android/">Android</a> / <a class="has-link-grey -link" href="/categories/Android/AOSP/">AOSP</a>
-                    </p>
-                </div>
-            </div>
-        </article>
-        
-        <article class="media">
-            
-            <a href="/2019/10/09/zygote/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Java 世界的盘古和女娲 —— Zygote">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-10-09T01:23:39.895Z">2019-10-09</time></div>
-                    <a href="/2019/10/09/zygote/" class="title has-link-black-ter is-size-6 has-text-weight-normal">Java 世界的盘古和女娲 —— Zygote</a>
-                    <p class="is-size-7 is-uppercase">
-                        <a class="has-link-grey -link" href="/categories/Android/">Android</a> / <a class="has-link-grey -link" href="/categories/Android/AOSP/">AOSP</a>
-                    </p>
-                </div>
-            </div>
-        </article>
-        
-    </div>
-</div>
-    
-        <div class="card widget">
-    <div class="card-content">
-        <div class="menu">
-        <h3 class="menu-label">
-            归档
-        </h3>
-        <ul class="menu-list">
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2019/10/">
-                <span class="level-start">
-                    <span class="level-item">十月 2019</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">2</span>
-                </span>
-            </a>
-        </li>
-        
-        </ul>
-        </div>
-    </div>
-</div>
-    
-        <div class="card widget">
-    <div class="card-content">
-        <div class="menu">
-            <h3 class="menu-label">
-                标签
-            </h3>
-            <div class="field is-grouped is-grouped-multiline">
-                
-                <div class="control">
-                    <a class="tags has-addons" href="/tags/Handler/">
-                        <span class="tag">Handler</span>
-                        <span class="tag is-grey">1</span>
-                    </a>
-                </div>
-                
-                <div class="control">
-                    <a class="tags has-addons" href="/tags/Zygote/">
-                        <span class="tag">Zygote</span>
-                        <span class="tag is-grey">1</span>
-                    </a>
-                </div>
-                
-            </div>
-        </div>
-    </div>
-</div>
-    
-    
-</div>
-
             </div>
         </div>
     </section>
