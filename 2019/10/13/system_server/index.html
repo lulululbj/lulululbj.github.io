@@ -7,20 +7,22 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 
-<title>分类: Android - 路遥的博客</title>
+<title>Zygote家 的大儿子 —— SystemServer - 路遥的博客</title>
 
 
-    <meta name="description" content="android">
-<meta property="og:type" content="website">
-<meta property="og:title" content="路遥的博客">
-<meta property="og:url" content="http://sunluyao.com/categories/Android/index.html">
+    <meta name="description" content="本文基于 Android 9.0 , 代码仓库地址 ： android_9.0.0_r45 文中源码链接： SystemServer.java SystemServiceManager.java SystemService.java  首先来回顾一下上篇文章 Java 世界的盘古和女娲 —— Zygote ，主要介绍了 Android 世界中的第一个 Java 进程 Zygote，它的主要工作流">
+<meta name="keywords" content="SystemServer">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Zygote家 的大儿子 —— SystemServer">
+<meta property="og:url" content="http://sunluyao.com/2019/10/13/system_server/index.html">
 <meta property="og:site_name" content="路遥的博客">
-<meta property="og:description" content="android">
+<meta property="og:description" content="本文基于 Android 9.0 , 代码仓库地址 ： android_9.0.0_r45 文中源码链接： SystemServer.java SystemServiceManager.java SystemService.java  首先来回顾一下上篇文章 Java 世界的盘古和女娲 —— Zygote ，主要介绍了 Android 世界中的第一个 Java 进程 Zygote，它的主要工作流">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://sunluyao.com/images/og_image.png">
+<meta property="og:updated_time" content="2019-10-13T15:13:51.608Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="路遥的博客">
-<meta name="twitter:description" content="android">
+<meta name="twitter:title" content="Zygote家 的大儿子 —— SystemServer">
+<meta name="twitter:description" content="本文基于 Android 9.0 , 代码仓库地址 ： android_9.0.0_r45 文中源码链接： SystemServer.java SystemServiceManager.java SystemService.java  首先来回顾一下上篇文章 Java 世界的盘古和女娲 —— Zygote ，主要介绍了 Android 世界中的第一个 Java 进程 Zygote，它的主要工作流">
 <meta name="twitter:image" content="http://sunluyao.com/images/og_image.png">
 
 
@@ -73,14 +75,14 @@
 
 <link rel="stylesheet" href="/css/style.css">
 </head>
-<!-- <body class="is-3-column"> -->
+<!-- <body class="is-2-column"> -->
 <body class="is-3-column">
     <nav class="navbar navbar-main">
     <div class="container">
         <div class="navbar-brand is-flex-center">
             <a class="navbar-item navbar-logo" href="/">
             
-                <img src="/images/logo.svg" alt="路遥的博客" height="28">
+                <img src="/images/logo.svg" alt="Zygote家 的大儿子 —— SystemServer" height="28">
             
             </a>
         </div>
@@ -116,6 +118,10 @@
                     
                 
                 
+                <a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;">
+                    <i class="fas fa-list-ul"></i>
+                </a>
+                
                 
                 <a class="navbar-item search" title="搜索" href="javascript:;">
                     <i class="fas fa-search"></i>
@@ -129,25 +135,13 @@
     <section class="section">
         <div class="container">
             <div class="columns">
-                <div class="column is-8-tablet is-8-desktop is-6-widescreen has-order-2 column-main"><div class="card">
-    <div class="card-content">
-        <nav class="breadcrumb" aria-label="breadcrumbs">
-        <ul>
-            <li><a href="/categories">分类</a></li>
-            
-            <li class="is-active"><a href="#" aria-current="page">Android</a></li>
-        </ul>
-        </nav>
-    </div>
-</div>
-
-    
+                <div class="column is-8-tablet is-8-desktop is-9-widescreen has-order-2 column-main">
 <div class="card">
     
     <div class="card-content article ">
          <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
             
-                <a class="has-link-black-ter" href="/2019/10/13/system_server/">Zygote家 的大儿子 —— SystemServer</a>
+                Zygote家 的大儿子 —— SystemServer
             
         </h1>
         
@@ -169,12 +163,17 @@
                 </span>
                 
                 
+                <span class="level-item has-text-grey" id="busuanzi_container_page_pv">
+                    <i class="far fa-eye"></i>
+                    <span id="busuanzi_value_page_pv">0</span> 次访问
+                </span>
+                
             </div>
         </div>
         
         <!-- <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
             
-                <a class="has-link-black-ter" href="/2019/10/13/system_server/">Zygote家 的大儿子 —— SystemServer</a>
+                Zygote家 的大儿子 —— SystemServer
             
         </h1> -->
         <div class="content">
@@ -284,76 +283,17 @@
 
         </div>
         
-        
-        
-    </div>
-</div>
-
-
-
-
-
-
-
-
-    
-<div class="card">
-    
-    <div class="card-content article ">
-         <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                <a class="has-link-black-ter" href="/2019/10/09/handler/">深入理解 Handler 消息机制</a>
-            
-        </h1>
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <!-- <time class="level-item has-text-grey" datetime="2019-10-09T15:54:32.922Z">2019-10-09</time> -->
-                <time class="level-item has-text-grey" datetime="2019-10-09T15:54:32.922Z"><i class="far fa-calendar-alt">&nbsp;</i>2019-10-09</time>
-                <!--  -->
-                
-                <div class="level-item">
-                <a class="has-link-grey -link" href="/categories/Android/">Android</a>&nbsp;/&nbsp;<a class="has-link-grey -link" href="/categories/Android/AOSP/">AOSP</a>
-                </div>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    31 分钟 读完 (大约 4638 个字)
-                </span>
-                
-                
-            </div>
-        </div>
-        
-        <!-- <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                <a class="has-link-black-ter" href="/2019/10/09/handler/">深入理解 Handler 消息机制</a>
-            
-        </h1> -->
-        <div class="content">
-            <p>记得很多年前的一次面试中，面试官问了这么一个问题，<code>你在项目中一般如何实现线程切换？</code> 他的本意应该是考察 RxJava 的使用，只是我的答案是 <code>Handler</code>，他也就没有再追问下去了。在早期 Android 开发的荒芜时代，Handler 的确承担了项目中大部分的线程切换工作，通常包括子线程更新 UI 和消息传递。不光在我们自己的应用中，在整个 Android 体系中，Handler 消息机制也是极其重要的，不亚于 Binder 的地位。 <code>ActivityThread.java</code> 中的内部类 <code>H</code> 就是一个 Handler，它内部定义了几十种消息类型来处理一些系统事件。</p>
-        </div>
-        
-        
-        <!-- <div class="level is-mobile"> -->
-                    <hr style="height:1px;margin:1rem 0"/>
-                    <div class="level is-mobile is-flex">
-                        <div class="level-start">
-                            
-                            <div class="level-item is-size-7 is-uppercase">
-                                <i class="fas fa-tags has-text-grey"></i>&nbsp;
-                                <a class="has-link-grey -link" href="/tags/Handler/">Handler</a>
-                            </div>
-                            
-                        </div>
+        <hr style="height:1px;margin:1rem 0"/>
+        <div class="level is-size-7 is-uppercase">
             <div class="level-start">
                 <div class="level-item">
-                <a class="button is-size-7 is-light" href="/2019/10/09/handler/#more">阅读更多</a>
+                    <!-- <span class="is-size-6 has-text-grey has-mr-7">#</span> -->
+                    <i class="fas fa-tags has-text-grey"></i>&nbsp;
+                    <a class="has-link-grey -link" href="/tags/SystemServer/">SystemServer</a>
                 </div>
             </div>
         </div>
+        
         
         
     </div>
@@ -361,87 +301,55 @@
 
 
 
-
-
-
-
-
-    
 <div class="card">
-    
-    <div class="card-content article ">
-         <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+    <div class="card-content">
+        <h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3>
+        <div class="buttons is-centered">
             
-                <a class="has-link-black-ter" href="/2019/10/09/zygote/">Java 世界的盘古和女娲 —— Zygote</a>
-            
-        </h1>
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <!-- <time class="level-item has-text-grey" datetime="2019-10-09T15:54:32.922Z">2019-10-09</time> -->
-                <time class="level-item has-text-grey" datetime="2019-10-09T15:54:32.922Z"><i class="far fa-calendar-alt">&nbsp;</i>2019-10-09</time>
-                <!--  -->
                 
-                <div class="level-item">
-                <a class="has-link-grey -link" href="/categories/Android/">Android</a>&nbsp;/&nbsp;<a class="has-link-grey -link" href="/categories/Android/AOSP/">AOSP</a>
-                </div>
+<div class="notification is-danger">
+    You forgot to set the <code>qrcode</code> for Alipay. Please set it in <code>_config.yml</code>.
+</div>
+
                 
                 
-                <span class="level-item has-text-grey">
-                    
-                    
-                    32 分钟 读完 (大约 4869 个字)
-                </span>
+<div class="notification is-danger">
+    You forgot to set the <code>qrcode</code> for Wechat. Please set it in <code>_config.yml</code>.
+</div>
+
+                
+                <!-- Visit https://www.paypal.com/donate/buttons/ to get your donate button -->
+
+<div class="notification is-danger">
+    You forgot to set the <code>business</code> and <code>currency_code</code> for Paypal. Please set it in <code>_config.yml</code>.
+</div>
+
                 
                 
-            </div>
+<div class="notification is-danger">
+    You forgot to set the <code>url</code> Patreon. Please set it in <code>_config.yml</code>.
+</div>
+
+                
         </div>
-        
-        <!-- <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                <a class="has-link-black-ter" href="/2019/10/09/zygote/">Java 世界的盘古和女娲 —— Zygote</a>
-            
-        </h1> -->
-        <div class="content">
-            <blockquote>
-<p>本文基于 Android 9.0 , 代码仓库地址 ： <a href="https://github.com/lulululbj/android_9.0.0_r45" target="_blank" rel="noopener">android_9.0.0_r45</a></p>
-<p>文中源码链接：</p>
-<p><a href="https://github.com/lulululbj/android_9.0.0_r45/blob/master/frameworks/base/core/java/com/android/internal/os/Zygote.java" target="_blank" rel="noopener">Zygote.java</a></p>
-<p><a href="https://github.com/lulululbj/android_9.0.0_r45/blob/master/frameworks/base/core/java/com/android/internal/os/ZygoteInit.java" target="_blank" rel="noopener">ZygoteInit.java</a></p>
-<p><a href="https://github.com/lulululbj/android_9.0.0_r45/blob/master/frameworks/base/core/java/com/android/internal/os/ZygoteServer.java" target="_blank" rel="noopener">ZygoteServer.java</a></p>
-<p><a href="https://github.com/lulululbj/android_9.0.0_r45/blob/master/frameworks/base/core/java/com/android/internal/os/ZygoteConnection.java" target="_blank" rel="noopener">ZygoteConnection.java</a></p>
-<p><a href="https://github.com/lulululbj/android_9.0.0_r45/blob/master/frameworks/base/core/java/com/android/internal/os/RuntimeInit.java" target="_blank" rel="noopener">RuntimeInit.java</a></p>
-</blockquote>
-        </div>
-        
-        
-        <!-- <div class="level is-mobile"> -->
-                    <hr style="height:1px;margin:1rem 0"/>
-                    <div class="level is-mobile is-flex">
-                        <div class="level-start">
-                            
-                            <div class="level-item is-size-7 is-uppercase">
-                                <i class="fas fa-tags has-text-grey"></i>&nbsp;
-                                <a class="has-link-grey -link" href="/tags/Zygote/">Zygote</a>
-                            </div>
-                            
-                        </div>
-            <div class="level-start">
-                <div class="level-item">
-                <a class="button is-size-7 is-light" href="/2019/10/09/zygote/#more">阅读更多</a>
-                </div>
-            </div>
-        </div>
-        
-        
     </div>
 </div>
 
 
 
-
-
-
+<div class="card card-transparent">
+    <div class="level post-navigation is-flex-wrap is-mobile">
+        
+        
+        <div class="level-end">
+            <a class="level level-item has-link-grey  article-nav-next" href="/2019/10/09/handler/">
+                <span class="level-item">深入理解 Handler 消息机制</span>
+                <i class="level-item fas fa-chevron-right"></i>
+            </a>
+        </div>
+        
+    </div>
+</div>
 
 
 </div>
@@ -565,351 +473,66 @@
 </div>
     
         
-    
-        
-<div class="card widget">
-    <div class="card-content">
-        <div class="menu">
-        <h3 class="menu-label">
-            链接
-        </h3>
-        <ul class="menu-list">
-        
-            <li>
-                <a class="level is-mobile" href="https://hexo.io" target="_blank">
-                    <span class="level-left">
-                        <span class="level-item">Hexo</span>
-                    </span>
-                    <span class="level-right">
-                        <span class="level-item tag">hexo.io</span>
-                    </span>
-                </a>
-            </li>
-        
-            <li>
-                <a class="level is-mobile" href="https://github.com/ppoffice" target="_blank">
-                    <span class="level-left">
-                        <span class="level-item">PPOffice</span>
-                    </span>
-                    <span class="level-right">
-                        <span class="level-item tag">github.com</span>
-                    </span>
-                </a>
-            </li>
-        
-        </ul>
-        </div>
-    </div>
-</div>
-
-
-    
-        
-
-<div class="card widget">
+<!-- <div class="card widget" id="toc"> -->
+<div class="card widget column-left is-sticky" id="toc">
     <div class="card-content">
         <div class="menu">
             <h3 class="menu-label">
-                分类
+                目录
             </h3>
-            <ul class="menu-list">
-            <li>
-        <a class="level is-marginless" href="/categories/Android/">
-            <span class="level-start">
-                <span class="level-item">Android</span>
-            </span>
-            <span class="level-end">
-                <span class="level-item tag">3</span>
-            </span>
-        </a><ul><li>
-        <a class="level is-marginless" href="/categories/Android/AOSP/">
-            <span class="level-start">
-                <span class="level-item">AOSP</span>
-            </span>
-            <span class="level-end">
-                <span class="level-item tag">3</span>
-            </span>
-        </a></li></ul></li>
-            </ul>
+            <ul class="menu-list"><li>
+        <a class="is-flex" href="#SystemServer-启动流程">
+        <span class="has-mr-6">1</span>
+        <span>SystemServer 启动流程</span>
+        </a><ul class="menu-list"><li>
+        <a class="is-flex" href="#Looper-prepareMainLooper">
+        <span class="has-mr-6">1.1</span>
+        <span>Looper.prepareMainLooper()</span>
+        </a></li><li>
+        <a class="is-flex" href="#createSystemContext">
+        <span class="has-mr-6">1.2</span>
+        <span>createSystemContext()</span>
+        </a></li><li>
+        <a class="is-flex" href="#startBootstrapServices">
+        <span class="has-mr-6">1.3</span>
+        <span>startBootstrapServices()</span>
+        </a></li><li>
+        <a class="is-flex" href="#startCoreServices">
+        <span class="has-mr-6">1.4</span>
+        <span>startCoreServices()</span>
+        </a></li><li>
+        <a class="is-flex" href="#startOtherServices">
+        <span class="has-mr-6">1.5</span>
+        <span>startOtherServices()</span>
+        </a></li><li>
+        <a class="is-flex" href="#Looper-loop">
+        <span class="has-mr-6">1.6</span>
+        <span>Looper.loop()</span>
+        </a></li></ul></li><li>
+        <a class="is-flex" href="#SystemServer-启动阶段分类">
+        <span class="has-mr-6">2</span>
+        <span>SystemServer 启动阶段分类</span>
+        </a></li><li>
+        <a class="is-flex" href="#SystemServer-是如何启动服务的-？">
+        <span class="has-mr-6">3</span>
+        <span>SystemServer 是如何启动服务的 ？</span>
+        </a></li><li>
+        <a class="is-flex" href="#总结">
+        <span class="has-mr-6">4</span>
+        <span>总结</span>
+        </a></li><li>
+        <a class="is-flex" href="#预告">
+        <span class="has-mr-6">5</span>
+        <span>预告</span>
+        </a></li></ul>
         </div>
     </div>
 </div>
-
-    
-        
-<div class="card widget">
-    <div class="card-content">
-        <h3 class="menu-label">
-            标签云
-        </h3>
-        <a href="/tags/Handler/" style="font-size: 10px;">Handler</a> <a href="/tags/SystemServer/" style="font-size: 10px;">SystemServer</a> <a href="/tags/Zygote/" style="font-size: 10px;">Zygote</a>
-    </div>
-</div>
-
     
     
         <div class="column-right-shadow is-hidden-widescreen ">
         
-            <div class="card widget">
-    <div class="card-content">
-        <h3 class="menu-label">
-            最新文章
-        </h3>
-        
-        <article class="media">
-            
-            <a href="/2019/10/13/system_server/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Zygote家 的大儿子 —— SystemServer">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-10-13T15:13:51.608Z">2019-10-13</time></div>
-                    <a href="/2019/10/13/system_server/" class="title has-link-black-ter is-size-6 has-text-weight-normal">Zygote家 的大儿子 —— SystemServer</a>
-                    <p class="is-size-7 is-uppercase">
-                        <a class="has-link-grey -link" href="/categories/Android/">Android</a> / <a class="has-link-grey -link" href="/categories/Android/AOSP/">AOSP</a>
-                    </p>
-                </div>
-            </div>
-        </article>
-        
-        <article class="media">
-            
-            <a href="/2019/10/09/handler/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="深入理解 Handler 消息机制">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-10-09T15:54:32.922Z">2019-10-09</time></div>
-                    <a href="/2019/10/09/handler/" class="title has-link-black-ter is-size-6 has-text-weight-normal">深入理解 Handler 消息机制</a>
-                    <p class="is-size-7 is-uppercase">
-                        <a class="has-link-grey -link" href="/categories/Android/">Android</a> / <a class="has-link-grey -link" href="/categories/Android/AOSP/">AOSP</a>
-                    </p>
-                </div>
-            </div>
-        </article>
-        
-        <article class="media">
-            
-            <a href="/2019/10/09/zygote/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Java 世界的盘古和女娲 —— Zygote">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-10-09T15:54:32.922Z">2019-10-09</time></div>
-                    <a href="/2019/10/09/zygote/" class="title has-link-black-ter is-size-6 has-text-weight-normal">Java 世界的盘古和女娲 —— Zygote</a>
-                    <p class="is-size-7 is-uppercase">
-                        <a class="has-link-grey -link" href="/categories/Android/">Android</a> / <a class="has-link-grey -link" href="/categories/Android/AOSP/">AOSP</a>
-                    </p>
-                </div>
-            </div>
-        </article>
-        
-    </div>
-</div>
-        
-            <div class="card widget">
-    <div class="card-content">
-        <div class="menu">
-        <h3 class="menu-label">
-            归档
-        </h3>
-        <ul class="menu-list">
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2019/10/">
-                <span class="level-start">
-                    <span class="level-item">十月 2019</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">3</span>
-                </span>
-            </a>
-        </li>
-        
-        </ul>
         </div>
-    </div>
-</div>
-        
-            <div class="card widget">
-    <div class="card-content">
-        <div class="menu">
-            <h3 class="menu-label">
-                标签
-            </h3>
-            <div class="field is-grouped is-grouped-multiline">
-                
-                <div class="control">
-                    <a class="tags has-addons" href="/tags/Handler/">
-                        <span class="tag">Handler</span>
-                        <span class="tag is-grey">1</span>
-                    </a>
-                </div>
-                
-                <div class="control">
-                    <a class="tags has-addons" href="/tags/SystemServer/">
-                        <span class="tag">SystemServer</span>
-                        <span class="tag is-grey">1</span>
-                    </a>
-                </div>
-                
-                <div class="control">
-                    <a class="tags has-addons" href="/tags/Zygote/">
-                        <span class="tag">Zygote</span>
-                        <span class="tag is-grey">1</span>
-                    </a>
-                </div>
-                
-            </div>
-        </div>
-    </div>
-</div>
-        
-        </div>
-    
-</div>
-
-                
-                
-
-
-
-
-<div class="column is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only has-order-3 column-right ">
-    
-        <div class="card widget">
-    <div class="card-content">
-        <h3 class="menu-label">
-            最新文章
-        </h3>
-        
-        <article class="media">
-            
-            <a href="/2019/10/13/system_server/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Zygote家 的大儿子 —— SystemServer">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-10-13T15:13:51.608Z">2019-10-13</time></div>
-                    <a href="/2019/10/13/system_server/" class="title has-link-black-ter is-size-6 has-text-weight-normal">Zygote家 的大儿子 —— SystemServer</a>
-                    <p class="is-size-7 is-uppercase">
-                        <a class="has-link-grey -link" href="/categories/Android/">Android</a> / <a class="has-link-grey -link" href="/categories/Android/AOSP/">AOSP</a>
-                    </p>
-                </div>
-            </div>
-        </article>
-        
-        <article class="media">
-            
-            <a href="/2019/10/09/handler/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="深入理解 Handler 消息机制">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-10-09T15:54:32.922Z">2019-10-09</time></div>
-                    <a href="/2019/10/09/handler/" class="title has-link-black-ter is-size-6 has-text-weight-normal">深入理解 Handler 消息机制</a>
-                    <p class="is-size-7 is-uppercase">
-                        <a class="has-link-grey -link" href="/categories/Android/">Android</a> / <a class="has-link-grey -link" href="/categories/Android/AOSP/">AOSP</a>
-                    </p>
-                </div>
-            </div>
-        </article>
-        
-        <article class="media">
-            
-            <a href="/2019/10/09/zygote/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Java 世界的盘古和女娲 —— Zygote">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-10-09T15:54:32.922Z">2019-10-09</time></div>
-                    <a href="/2019/10/09/zygote/" class="title has-link-black-ter is-size-6 has-text-weight-normal">Java 世界的盘古和女娲 —— Zygote</a>
-                    <p class="is-size-7 is-uppercase">
-                        <a class="has-link-grey -link" href="/categories/Android/">Android</a> / <a class="has-link-grey -link" href="/categories/Android/AOSP/">AOSP</a>
-                    </p>
-                </div>
-            </div>
-        </article>
-        
-    </div>
-</div>
-    
-        <div class="card widget">
-    <div class="card-content">
-        <div class="menu">
-        <h3 class="menu-label">
-            归档
-        </h3>
-        <ul class="menu-list">
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2019/10/">
-                <span class="level-start">
-                    <span class="level-item">十月 2019</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">3</span>
-                </span>
-            </a>
-        </li>
-        
-        </ul>
-        </div>
-    </div>
-</div>
-    
-        <div class="card widget">
-    <div class="card-content">
-        <div class="menu">
-            <h3 class="menu-label">
-                标签
-            </h3>
-            <div class="field is-grouped is-grouped-multiline">
-                
-                <div class="control">
-                    <a class="tags has-addons" href="/tags/Handler/">
-                        <span class="tag">Handler</span>
-                        <span class="tag is-grey">1</span>
-                    </a>
-                </div>
-                
-                <div class="control">
-                    <a class="tags has-addons" href="/tags/SystemServer/">
-                        <span class="tag">SystemServer</span>
-                        <span class="tag is-grey">1</span>
-                    </a>
-                </div>
-                
-                <div class="control">
-                    <a class="tags has-addons" href="/tags/Zygote/">
-                        <span class="tag">Zygote</span>
-                        <span class="tag is-grey">1</span>
-                    </a>
-                </div>
-                
-            </div>
-        </div>
-    </div>
-</div>
-    
     
 </div>
 
@@ -923,7 +546,7 @@
             <div class="level-start has-text-centered-mobile">
                 <a class="footer-logo is-block has-mb-6" href="/">
                 
-                    <img src="/images/logo.svg" alt="路遥的博客" height="28">
+                    <img src="/images/logo.svg" alt="Zygote家 的大儿子 —— SystemServer" height="28">
                 
                 </a>
                 <p class="is-size-7">
