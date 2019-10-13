@@ -10,19 +10,19 @@
 <title>Zygote家 的大儿子 —— SystemServer - 路遥的博客</title>
 
 
-    <meta name="description" content="本文基于 Android 9.0 , 代码仓库地址 ： android_9.0.0_r45 文中源码链接： SystemServer.java SystemServiceManager.java SystemService.java  首先来回顾一下上篇文章 Java 世界的盘古和女娲 —— Zygote ，主要介绍了 Android 世界中的第一个 Java 进程 Zygote，它的主要工作流">
+    <meta name="description" content="本文基于 Android 9.0 , 代码仓库地址 ： android_9.0.0_r45 文中源码链接： SystemServer.java SystemServiceManager.java SystemService.java">
 <meta name="keywords" content="SystemServer">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Zygote家 的大儿子 —— SystemServer">
 <meta property="og:url" content="http://sunluyao.com/2019/10/13/system_server/index.html">
 <meta property="og:site_name" content="路遥的博客">
-<meta property="og:description" content="本文基于 Android 9.0 , 代码仓库地址 ： android_9.0.0_r45 文中源码链接： SystemServer.java SystemServiceManager.java SystemService.java  首先来回顾一下上篇文章 Java 世界的盘古和女娲 —— Zygote ，主要介绍了 Android 世界中的第一个 Java 进程 Zygote，它的主要工作流">
+<meta property="og:description" content="本文基于 Android 9.0 , 代码仓库地址 ： android_9.0.0_r45 文中源码链接： SystemServer.java SystemServiceManager.java SystemService.java">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://sunluyao.com/images/og_image.png">
-<meta property="og:updated_time" content="2019-10-13T15:13:51.608Z">
+<meta property="og:updated_time" content="2019-10-13T15:21:30.531Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Zygote家 的大儿子 —— SystemServer">
-<meta name="twitter:description" content="本文基于 Android 9.0 , 代码仓库地址 ： android_9.0.0_r45 文中源码链接： SystemServer.java SystemServiceManager.java SystemService.java  首先来回顾一下上篇文章 Java 世界的盘古和女娲 —— Zygote ，主要介绍了 Android 世界中的第一个 Java 进程 Zygote，它的主要工作流">
+<meta name="twitter:description" content="本文基于 Android 9.0 , 代码仓库地址 ： android_9.0.0_r45 文中源码链接： SystemServer.java SystemServiceManager.java SystemService.java">
 <meta name="twitter:image" content="http://sunluyao.com/images/og_image.png">
 
 
@@ -147,8 +147,8 @@
         
         <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
             <div class="level-left">
-                <!-- <time class="level-item has-text-grey" datetime="2019-10-13T15:13:51.608Z">2019-10-13</time> -->
-                <time class="level-item has-text-grey" datetime="2019-10-13T15:13:51.608Z"><i class="far fa-calendar-alt">&nbsp;</i>2019-10-13</time>
+                <!-- <time class="level-item has-text-grey" datetime="2019-10-13T15:21:30.531Z">2019-10-13</time> -->
+                <time class="level-item has-text-grey" datetime="2019-10-13T15:21:30.531Z"><i class="far fa-calendar-alt">&nbsp;</i>2019-10-13</time>
                 <!--  -->
                 
                 <div class="level-item">
@@ -159,7 +159,7 @@
                 <span class="level-item has-text-grey">
                     
                     
-                    27 分钟 读完 (大约 4121 个字)
+                    27 分钟 读完 (大约 4122 个字)
                 </span>
                 
                 
@@ -184,6 +184,8 @@
 <p><a href="https://github.com/lulululbj/android_9.0.0_r45/blob/master/frameworks/base/services/core/java/com/android/server/SystemServiceManager.java" target="_blank" rel="noopener">SystemServiceManager.java</a></p>
 <p><a href="https://github.com/lulululbj/android_9.0.0_r45/blob/master/frameworks/base/services/core/java/com/android/server/SystemService.java" target="_blank" rel="noopener">SystemService.java</a></p>
 </blockquote>
+<a id="more"></a>
+
 <p>首先来回顾一下上篇文章 <a href="https://juejin.im/post/5d8f73bf51882555b149dc64" target="_blank" rel="noopener">Java 世界的盘古和女娲 —— Zygote</a> ，主要介绍了 Android 世界中的第一个 Java 进程 <code>Zygote</code>，它的主要工作流程如下：</p>
 <ol>
 <li><code>registerServerSocketFromEnv()</code>， 注册服务端 socket，用于和客户端进程通信</li>
