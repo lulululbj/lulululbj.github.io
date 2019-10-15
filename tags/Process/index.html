@@ -7,13 +7,13 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 
-<title>标签: Handler - 路遥的博客</title>
+<title>标签: Process - 路遥的博客</title>
 
 
     <meta name="description" content="android">
 <meta property="og:type" content="website">
 <meta property="og:title" content="路遥的博客">
-<meta property="og:url" content="http://sunluyao.com/tags/Handler/index.html">
+<meta property="og:url" content="http://sunluyao.com/tags/Process/index.html">
 <meta property="og:site_name" content="路遥的博客">
 <meta property="og:description" content="android">
 <meta property="og:locale" content="zh-CN">
@@ -134,7 +134,7 @@
         <nav class="breadcrumb" aria-label="breadcrumbs">
         <ul>
             <li><a href="/tags">标签</a></li>
-            <li class="is-active"><a href="#" aria-current="page">Handler</a></li>
+            <li class="is-active"><a href="#" aria-current="page">Process</a></li>
         </ul>
         </nav>
     </div>
@@ -146,14 +146,14 @@
     <div class="card-content article ">
          <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
             
-                <a class="has-link-black-ter" href="/2019/10/09/handler/">深入理解 Handler 消息机制</a>
+                <a class="has-link-black-ter" href="/2019/10/15/zygote_fork/">Android 世界中，谁喊醒了 Zygote ？</a>
             
         </h1>
         
         <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
             <div class="level-left">
-                <!-- <time class="level-item has-text-grey" datetime="2019-10-09T15:54:32.922Z">2019-10-09</time> -->
-                <time class="level-item has-text-grey" datetime="2019-10-09T15:54:32.922Z"><i class="far fa-calendar-alt">&nbsp;</i>2019-10-09</time>
+                <!-- <time class="level-item has-text-grey" datetime="2019-10-15T15:26:50.608Z">2019-10-15</time> -->
+                <time class="level-item has-text-grey" datetime="2019-10-15T15:26:50.608Z"><i class="far fa-calendar-alt">&nbsp;</i>2019-10-15</time>
                 <!--  -->
                 
                 <div class="level-item">
@@ -164,7 +164,7 @@
                 <span class="level-item has-text-grey">
                     
                     
-                    31 分钟 读完 (大约 4638 个字)
+                    20 分钟 读完 (大约 3048 个字)
                 </span>
                 
                 
@@ -173,11 +173,18 @@
         
         <!-- <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
             
-                <a class="has-link-black-ter" href="/2019/10/09/handler/">深入理解 Handler 消息机制</a>
+                <a class="has-link-black-ter" href="/2019/10/15/zygote_fork/">Android 世界中，谁喊醒了 Zygote ？</a>
             
         </h1> -->
         <div class="content">
-            <p>记得很多年前的一次面试中，面试官问了这么一个问题，<code>你在项目中一般如何实现线程切换？</code> 他的本意应该是考察 RxJava 的使用，只是我的答案是 <code>Handler</code>，他也就没有再追问下去了。在早期 Android 开发的荒芜时代，Handler 的确承担了项目中大部分的线程切换工作，通常包括子线程更新 UI 和消息传递。不光在我们自己的应用中，在整个 Android 体系中，Handler 消息机制也是极其重要的，不亚于 Binder 的地位。 <code>ActivityThread.java</code> 中的内部类 <code>H</code> 就是一个 Handler，它内部定义了几十种消息类型来处理一些系统事件。</p>
+            <blockquote>
+<p>本文基于 Android 9.0 , 代码仓库地址 ： <a href="https://github.com/lulululbj/android_9.0.0_r45" target="_blank" rel="noopener">android_9.0.0_r45</a></p>
+<p>文中源码链接：</p>
+<p><a href="https://github.com/lulululbj/android_9.0.0_r45/blob/master/frameworks/base/services/java/com/android/server/SystemServer.java" target="_blank" rel="noopener">SystemServer.java</a></p>
+<p><a href="https://github.com/lulululbj/android_9.0.0_r45/blob/master/frameworks/base/services/core/java/com/android/server/am/ActivityManagerService.java" target="_blank" rel="noopener">ActivityManagerService.java</a></p>
+<p><a href="https://github.com/lulululbj/android_9.0.0_r45/blob/master/frameworks/base/core/java/android/os/Process.java" target="_blank" rel="noopener">Process.java</a></p>
+<p><a href="https://github.com/lulululbj/android_9.0.0_r45/blob/master/frameworks/base/core/java/android/os/ZygoteProcess.java" target="_blank" rel="noopener">ZygoteProcess.java</a></p>
+</blockquote>
         </div>
         
         
@@ -188,13 +195,13 @@
                             
                             <div class="level-item is-size-7 is-uppercase">
                                 <i class="fas fa-tags has-text-grey"></i>&nbsp;
-                                <a class="has-link-grey -link" href="/tags/Handler/">Handler</a>
+                                <a class="has-link-grey -link" href="/tags/Process/">Process</a>,&nbsp;<a class="has-link-grey -link" href="/tags/Zygote/">Zygote</a>
                             </div>
                             
                         </div>
             <div class="level-start">
                 <div class="level-item">
-                <a class="button is-size-7 is-light" href="/2019/10/09/handler/#more">阅读更多</a>
+                <a class="button is-size-7 is-light" href="/2019/10/15/zygote_fork/#more">阅读更多</a>
                 </div>
             </div>
         </div>

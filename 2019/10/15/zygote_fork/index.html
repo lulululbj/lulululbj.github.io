@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html  lang="zh">
+<head>
+    <meta charset="utf-8" />
+
+<meta name="generator" content="Hexo 3.9.0" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+<title>Android 世界中，谁喊醒了 Zygote ？ - 路遥的博客</title>
+
+
+    <meta name="description" content="本文基于 Android 9.0 , 代码仓库地址 ： android_9.0.0_r45 文中源码链接： SystemServer.java ActivityManagerService.java Process.java ZygoteProcess.java">
+<meta name="keywords" content="Zygote,Process">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android 世界中，谁喊醒了 Zygote ？">
+<meta property="og:url" content="http://sunluyao.com/2019/10/15/zygote_fork/index.html">
+<meta property="og:site_name" content="路遥的博客">
+<meta property="og:description" content="本文基于 Android 9.0 , 代码仓库地址 ： android_9.0.0_r45 文中源码链接： SystemServer.java ActivityManagerService.java Process.java ZygoteProcess.java">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://sunluyao.com/images/og_image.png">
+<meta property="og:updated_time" content="2019-10-15T15:26:50.608Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android 世界中，谁喊醒了 Zygote ？">
+<meta name="twitter:description" content="本文基于 Android 9.0 , 代码仓库地址 ： android_9.0.0_r45 文中源码链接： SystemServer.java ActivityManagerService.java Process.java ZygoteProcess.java">
+<meta name="twitter:image" content="http://sunluyao.com/images/og_image.png">
+
+
+
+
+
+
+
+<link rel="icon" href="/images/favicon.svg">
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.7.2/css/bulma.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,600|Source+Code+Pro">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css">
+
+
+    
+    
+<style>body>.footer,body>.navbar,body>.section{opacity:0}</style>
+
+    
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css">
+
+    
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.css">
+
+    
+    
+    
+    
+<link rel="stylesheet" href="/css/back-to-top.css">
+
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="/css/progressbar.css">
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+    
+    <script async="" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+
+
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<!-- <body class="is-2-column"> -->
+<body class="is-3-column">
+    <nav class="navbar navbar-main">
+    <div class="container">
+        <div class="navbar-brand is-flex-center">
+            <a class="navbar-item navbar-logo" href="/">
+            
+                <img src="/images/logo.svg" alt="Android 世界中，谁喊醒了 Zygote ？" height="28">
+            
+            </a>
+        </div>
+        <div class="navbar-menu">
+            
+            <div class="navbar-start">
+                
+                <a class="navbar-item"
+                href="/">Home</a>
+                
+                <a class="navbar-item"
+                href="/archives">Archives</a>
+                
+                <a class="navbar-item"
+                href="/categories">Categories</a>
+                
+                <a class="navbar-item"
+                href="/tags">Tags</a>
+                
+                <a class="navbar-item"
+                href="/about">About</a>
+                
+            </div>
+            
+            <div class="navbar-end">
+                
+                    
+                    <a class="navbar-item" target="_blank" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                    
+                
+                
+                <a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;">
+                    <i class="fas fa-list-ul"></i>
+                </a>
+                
+                
+                <a class="navbar-item search" title="搜索" href="javascript:;">
+                    <i class="fas fa-search"></i>
+                </a>
+                
+            </div>
+        </div>
+    </div>
+</nav>
+    
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-8-tablet is-8-desktop is-9-widescreen has-order-2 column-main">
+<div class="card">
+    
+    <div class="card-content article ">
+         <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                Android 世界中，谁喊醒了 Zygote ？
+            
+        </h1>
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <!-- <time class="level-item has-text-grey" datetime="2019-10-15T15:26:50.608Z">2019-10-15</time> -->
+                <time class="level-item has-text-grey" datetime="2019-10-15T15:26:50.608Z"><i class="far fa-calendar-alt">&nbsp;</i>2019-10-15</time>
+                <!--  -->
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/Android/">Android</a>&nbsp;/&nbsp;<a class="has-link-grey -link" href="/categories/Android/AOSP/">AOSP</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    20 分钟 读完 (大约 3048 个字)
+                </span>
+                
+                
+                <span class="level-item has-text-grey" id="busuanzi_container_page_pv">
+                    <i class="far fa-eye"></i>
+                    <span id="busuanzi_value_page_pv">0</span> 次访问
+                </span>
+                
+            </div>
+        </div>
+        
+        <!-- <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                Android 世界中，谁喊醒了 Zygote ？
+            
+        </h1> -->
+        <div class="content">
+            <blockquote>
+<p>本文基于 Android 9.0 , 代码仓库地址 ： <a href="https://github.com/lulululbj/android_9.0.0_r45" target="_blank" rel="noopener">android_9.0.0_r45</a></p>
+<p>文中源码链接：</p>
+<p><a href="https://github.com/lulululbj/android_9.0.0_r45/blob/master/frameworks/base/services/java/com/android/server/SystemServer.java" target="_blank" rel="noopener">SystemServer.java</a></p>
+<p><a href="https://github.com/lulululbj/android_9.0.0_r45/blob/master/frameworks/base/services/core/java/com/android/server/am/ActivityManagerService.java" target="_blank" rel="noopener">ActivityManagerService.java</a></p>
+<p><a href="https://github.com/lulululbj/android_9.0.0_r45/blob/master/frameworks/base/core/java/android/os/Process.java" target="_blank" rel="noopener">Process.java</a></p>
+<p><a href="https://github.com/lulululbj/android_9.0.0_r45/blob/master/frameworks/base/core/java/android/os/ZygoteProcess.java" target="_blank" rel="noopener">ZygoteProcess.java</a></p>
+</blockquote>
+<a id="more"></a>
+
+
+<p>对 <code>Zygote</code> 和 <code>SystemServer</code> 启动流程还不熟悉的建议阅读下面两篇文章：</p>
+<blockquote>
+<p><a href="https://juejin.im/post/5d8f73bf51882555b149dc64" target="_blank" rel="noopener">Java 世界的盘古和女娲 —— Zygote</a></p>
+<p><a href="https://juejin.im/post/5da341f451882561ba64b9da" target="_blank" rel="noopener">Zygote 家的大儿子 —— SystemServer</a></p>
+</blockquote>
+<p><code>Zygote</code> 作为 Android 世界的受精卵，在成功繁殖出 <code>system_server</code> 进程之后并没有完全功成身退，仍然承担着受精卵的责任。<code>Zygote</code> 通过调用其持有的 <code>ZygoteServer</code> 对象的 <code>runSelectLoop()</code> 方法开始等待客户端的呼唤，有求必应。客户端的请求无非是创建应用进程，以 <code>startActivity()</code> 为例，假如开启的是一个尚未创建进程的应用，那么就会向 Zygote 请求创建进程。下面将从 <strong>客户端发送请求</strong> 和 <strong>服务端处理请求</strong> 两方面来进行解析。</p>
+<h2 id="客户端发送请求"><a href="#客户端发送请求" class="headerlink" title="客户端发送请求"></a>客户端发送请求</h2><p><code>startActivity()</code> 的具体流程这里就不分析了，系列后续文章会写到。我们直接看到创建进程的 <code>startProcess()</code> 方法，该方法在 <code>ActivityManagerService</code> 中，后面简称 <code>AMS</code>。</p>
+<h3 id="Process-startProcess"><a href="#Process-startProcess" class="headerlink" title="Process.startProcess()"></a>Process.startProcess()</h3><figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">&gt; ActivityManagerService.java</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">private</span> ProcessStartResult <span class="hljs-title">startProcess</span><span class="hljs-params">(String hostingType, String entryPoint,</span></span></span><br><span class="line"><span class="hljs-function"><span class="hljs-params">        ProcessRecord app, <span class="hljs-keyword">int</span> uid, <span class="hljs-keyword">int</span>[] gids, <span class="hljs-keyword">int</span> runtimeFlags, <span class="hljs-keyword">int</span> mountExternal,</span></span></span><br><span class="line"><span class="hljs-function"><span class="hljs-params">        String seInfo, String requiredAbi, String instructionSet, String invokeWith,</span></span></span><br><span class="line"><span class="hljs-function"><span class="hljs-params">        <span class="hljs-keyword">long</span> startTime)</span> </span>&#123;</span><br><span class="line">    <span class="hljs-keyword">try</span> &#123;</span><br><span class="line">        checkTime(startTime, <span class="hljs-string">"startProcess: asking zygote to start proc"</span>);</span><br><span class="line">        <span class="hljs-keyword">final</span> ProcessStartResult startResult;</span><br><span class="line">        <span class="hljs-keyword">if</span> (hostingType.equals(<span class="hljs-string">"webview_service"</span>)) &#123;</span><br><span class="line">            startResult = startWebView(entryPoint,</span><br><span class="line">                    app.processName, uid, uid, gids, runtimeFlags, mountExternal,</span><br><span class="line">                    app.info.targetSdkVersion, seInfo, requiredAbi, instructionSet,</span><br><span class="line">                    app.info.dataDir, <span class="hljs-keyword">null</span>,</span><br><span class="line">                    <span class="hljs-keyword">new</span> String[] &#123;PROC_START_SEQ_IDENT + app.startSeq&#125;);</span><br><span class="line">        &#125; <span class="hljs-keyword">else</span> &#123;</span><br><span class="line">            <span class="hljs-comment">// 新建进程</span></span><br><span class="line">            startResult = Process.start(entryPoint,</span><br><span class="line">                    app.processName, uid, uid, gids, runtimeFlags, mountExternal,</span><br><span class="line">                    app.info.targetSdkVersion, seInfo, requiredAbi, instructionSet,</span><br><span class="line">                    app.info.dataDir, invokeWith,</span><br><span class="line">                    <span class="hljs-keyword">new</span> String[] &#123;PROC_START_SEQ_IDENT + app.startSeq&#125;);</span><br><span class="line">        &#125;</span><br><span class="line">        checkTime(startTime, <span class="hljs-string">"startProcess: returned from zygote!"</span>);</span><br><span class="line">        <span class="hljs-keyword">return</span> startResult;</span><br><span class="line">    &#125; <span class="hljs-keyword">finally</span> &#123;</span><br><span class="line">        Trace.traceEnd(Trace.TRACE_TAG_ACTIVITY_MANAGER);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>调用 <code>Process.start()</code> 方法新建进程，继续追进去:</p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&gt; Process.java</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> ProcessStartResult <span class="hljs-title">start</span><span class="hljs-params">(</span></span></span><br><span class="line"><span class="hljs-function"><span class="hljs-params">                // android.app.ActivityThread，创建进程后会调用其 main()</span> 方法</span></span><br><span class="line"><span class="hljs-function">                <span class="hljs-keyword">final</span> String processClass,</span></span><br><span class="line"><span class="hljs-function">                <span class="hljs-keyword">final</span> String niceName, <span class="hljs-comment">// 进程名</span></span></span><br><span class="line"><span class="hljs-function">                <span class="hljs-keyword">int</span> uid, <span class="hljs-keyword">int</span> gid, <span class="hljs-keyword">int</span>[] gids,</span></span><br><span class="line"><span class="hljs-function">                <span class="hljs-keyword">int</span> runtimeFlags, <span class="hljs-keyword">int</span> mountExternal,</span></span><br><span class="line"><span class="hljs-function">                <span class="hljs-keyword">int</span> targetSdkVersion,</span></span><br><span class="line"><span class="hljs-function">                String seInfo,</span></span><br><span class="line"><span class="hljs-function">                String abi,</span></span><br><span class="line"><span class="hljs-function">                String instructionSet,</span></span><br><span class="line"><span class="hljs-function">                String appDataDir,</span></span><br><span class="line"><span class="hljs-function">                String invokeWith, <span class="hljs-comment">// 一般新建应用进程时，此参数不为 null</span></span></span><br><span class="line"><span class="hljs-function">                String[] zygoteArgs) </span>&#123;</span><br><span class="line">        <span class="hljs-keyword">return</span> zygoteProcess.start(processClass, niceName, uid, gid, gids,</span><br><span class="line">                    runtimeFlags, mountExternal, targetSdkVersion, seInfo,</span><br><span class="line">                    abi, instructionSet, appDataDir, invokeWith, zygoteArgs);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>继续调用 <code>zygoteProcess.start()</code> ：</p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">&gt; ZygoteProess.java</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> Process.<span class="hljs-function">ProcessStartResult <span class="hljs-title">start</span><span class="hljs-params">(<span class="hljs-keyword">final</span> String processClass,</span></span></span><br><span class="line"><span class="hljs-function"><span class="hljs-params">                                              <span class="hljs-keyword">final</span> String niceName,</span></span></span><br><span class="line"><span class="hljs-function"><span class="hljs-params">                                              <span class="hljs-keyword">int</span> uid, <span class="hljs-keyword">int</span> gid, <span class="hljs-keyword">int</span>[] gids,</span></span></span><br><span class="line"><span class="hljs-function"><span class="hljs-params">                                              <span class="hljs-keyword">int</span> runtimeFlags, <span class="hljs-keyword">int</span> mountExternal,</span></span></span><br><span class="line"><span class="hljs-function"><span class="hljs-params">                                              <span class="hljs-keyword">int</span> targetSdkVersion,</span></span></span><br><span class="line"><span class="hljs-function"><span class="hljs-params">                                              String seInfo,</span></span></span><br><span class="line"><span class="hljs-function"><span class="hljs-params">                                              String abi,</span></span></span><br><span class="line"><span class="hljs-function"><span class="hljs-params">                                              String instructionSet,</span></span></span><br><span class="line"><span class="hljs-function"><span class="hljs-params">                                              String appDataDir,</span></span></span><br><span class="line"><span class="hljs-function"><span class="hljs-params">                                              String invokeWith,</span></span></span><br><span class="line"><span class="hljs-function"><span class="hljs-params">                                              String[] zygoteArgs)</span> </span>&#123;</span><br><span class="line">    <span class="hljs-keyword">try</span> &#123;</span><br><span class="line">        <span class="hljs-keyword">return</span> startViaZygote(processClass, niceName, uid, gid, gids,</span><br><span class="line">                runtimeFlags, mountExternal, targetSdkVersion, seInfo,</span><br><span class="line">                abi, instructionSet, appDataDir, invokeWith, <span class="hljs-keyword">false</span> <span class="hljs-comment">/* startChildZygote */</span>,</span><br><span class="line">                zygoteArgs);</span><br><span class="line">    &#125; <span class="hljs-keyword">catch</span> (ZygoteStartFailedEx ex) &#123;</span><br><span class="line">        Log.e(LOG_TAG,</span><br><span class="line">                <span class="hljs-string">"Starting VM process through Zygote failed"</span>);</span><br><span class="line">        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> RuntimeException(</span><br><span class="line">                <span class="hljs-string">"Starting VM process through Zygote failed"</span>, ex);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>调用 <code>startViaZygote()</code> 方法。终于看到 Zygote 的身影了。</p>
+<h3 id="startViaZygote"><a href="#startViaZygote" class="headerlink" title="startViaZygote()"></a>startViaZygote()</h3><figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><span class="line">&gt; ZygoteProcess.java</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">private</span> Process.<span class="hljs-function">ProcessStartResult <span class="hljs-title">startViaZygote</span><span class="hljs-params">(<span class="hljs-keyword">final</span> String processClass,</span></span></span><br><span class="line"><span class="hljs-function"><span class="hljs-params">                                                  <span class="hljs-keyword">final</span> String niceName,</span></span></span><br><span class="line"><span class="hljs-function"><span class="hljs-params">                                                  <span class="hljs-keyword">final</span> <span class="hljs-keyword">int</span> uid, <span class="hljs-keyword">final</span> <span class="hljs-keyword">int</span> gid,</span></span></span><br><span class="line"><span class="hljs-function"><span class="hljs-params">                                                  <span class="hljs-keyword">final</span> <span class="hljs-keyword">int</span>[] gids,</span></span></span><br><span class="line"><span class="hljs-function"><span class="hljs-params">                                                  <span class="hljs-keyword">int</span> runtimeFlags, <span class="hljs-keyword">int</span> mountExternal,</span></span></span><br><span class="line"><span class="hljs-function"><span class="hljs-params">                                                  <span class="hljs-keyword">int</span> targetSdkVersion,</span></span></span><br><span class="line"><span class="hljs-function"><span class="hljs-params">                                                  String seInfo,</span></span></span><br><span class="line"><span class="hljs-function"><span class="hljs-params">                                                  String abi,</span></span></span><br><span class="line"><span class="hljs-function"><span class="hljs-params">                                                  String instructionSet,</span></span></span><br><span class="line"><span class="hljs-function"><span class="hljs-params">                                                  String appDataDir,</span></span></span><br><span class="line"><span class="hljs-function"><span class="hljs-params">                                                  String invokeWith,</span></span></span><br><span class="line"><span class="hljs-function"><span class="hljs-params">                                                  <span class="hljs-keyword">boolean</span> startChildZygote, // 是否克隆 zygote 进程的所有状态</span></span></span><br><span class="line"><span class="hljs-function"><span class="hljs-params">                                                  String[] extraArgs)</span></span></span><br><span class="line"><span class="hljs-function">                                                  <span class="hljs-keyword">throws</span> ZygoteStartFailedEx </span>&#123;</span><br><span class="line">    ArrayList&lt;String&gt; argsForZygote = <span class="hljs-keyword">new</span> ArrayList&lt;String&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="hljs-comment">// --runtime-args, --setuid=, --setgid=,</span></span><br><span class="line">    <span class="hljs-comment">// and --setgroups= must go first</span></span><br><span class="line">    <span class="hljs-comment">// 处理参数</span></span><br><span class="line">    argsForZygote.add(<span class="hljs-string">"--runtime-args"</span>);</span><br><span class="line">    argsForZygote.add(<span class="hljs-string">"--setuid="</span> + uid);</span><br><span class="line">    argsForZygote.add(<span class="hljs-string">"--setgid="</span> + gid);</span><br><span class="line">    argsForZygote.add(<span class="hljs-string">"--runtime-flags="</span> + runtimeFlags);</span><br><span class="line">    <span class="hljs-keyword">if</span> (mountExternal == Zygote.MOUNT_EXTERNAL_DEFAULT) &#123;</span><br><span class="line">        argsForZygote.add(<span class="hljs-string">"--mount-external-default"</span>);</span><br><span class="line">    &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (mountExternal == Zygote.MOUNT_EXTERNAL_READ) &#123;</span><br><span class="line">        argsForZygote.add(<span class="hljs-string">"--mount-external-read"</span>);</span><br><span class="line">    &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (mountExternal == Zygote.MOUNT_EXTERNAL_WRITE) &#123;</span><br><span class="line">        argsForZygote.add(<span class="hljs-string">"--mount-external-write"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    argsForZygote.add(<span class="hljs-string">"--target-sdk-version="</span> + targetSdkVersion);</span><br><span class="line"></span><br><span class="line">    <span class="hljs-comment">// --setgroups is a comma-separated list</span></span><br><span class="line">    <span class="hljs-keyword">if</span> (gids != <span class="hljs-keyword">null</span> &amp;&amp; gids.length &gt; <span class="hljs-number">0</span>) &#123;</span><br><span class="line">        StringBuilder sb = <span class="hljs-keyword">new</span> StringBuilder();</span><br><span class="line">        sb.append(<span class="hljs-string">"--setgroups="</span>);</span><br><span class="line"></span><br><span class="line">        <span class="hljs-keyword">int</span> sz = gids.length;</span><br><span class="line">        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; sz; i++) &#123;</span><br><span class="line">            <span class="hljs-keyword">if</span> (i != <span class="hljs-number">0</span>) &#123;</span><br><span class="line">                sb.append(<span class="hljs-string">','</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            sb.append(gids[i]);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        argsForZygote.add(sb.toString());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">if</span> (niceName != <span class="hljs-keyword">null</span>) &#123;</span><br><span class="line">        argsForZygote.add(<span class="hljs-string">"--nice-name="</span> + niceName);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">if</span> (seInfo != <span class="hljs-keyword">null</span>) &#123;</span><br><span class="line">        argsForZygote.add(<span class="hljs-string">"--seinfo="</span> + seInfo);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">if</span> (instructionSet != <span class="hljs-keyword">null</span>) &#123;</span><br><span class="line">        argsForZygote.add(<span class="hljs-string">"--instruction-set="</span> + instructionSet);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">if</span> (appDataDir != <span class="hljs-keyword">null</span>) &#123;</span><br><span class="line">        argsForZygote.add(<span class="hljs-string">"--app-data-dir="</span> + appDataDir);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">if</span> (invokeWith != <span class="hljs-keyword">null</span>) &#123;</span><br><span class="line">        argsForZygote.add(<span class="hljs-string">"--invoke-with"</span>);</span><br><span class="line">        argsForZygote.add(invokeWith);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">if</span> (startChildZygote) &#123;</span><br><span class="line">        argsForZygote.add(<span class="hljs-string">"--start-child-zygote"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    argsForZygote.add(processClass);</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">if</span> (extraArgs != <span class="hljs-keyword">null</span>) &#123;</span><br><span class="line">        <span class="hljs-keyword">for</span> (String arg : extraArgs) &#123;</span><br><span class="line">            argsForZygote.add(arg);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">synchronized</span>(mLock) &#123;</span><br><span class="line">        <span class="hljs-comment">// 和 Zygote 进程进行 socket 通信</span></span><br><span class="line">        <span class="hljs-keyword">return</span> zygoteSendArgsAndGetResult(openZygoteSocketIfNeeded(abi), argsForZygote);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>前面一大串代码都是在处理参数，大致浏览即可。核心在于最后的 <code>openZygoteSocketIfNeeded()</code> 和 <code>zygoteSendArgsAndGetResult()</code> 这两个方法。从方法命名就可以看出来，这里要和 <code>Zygote</code> 进行 socket 通信了。还记得 <code>ZygoteInit.main()</code> 方法中调用的 <code>registerServerSocketFromEnv()</code> 方法吗？它在 Zygote 进程中创建了服务端 socket。</p>
+<h3 id="openZygoteSocketIfNeeded"><a href="#openZygoteSocketIfNeeded" class="headerlink" title="openZygoteSocketIfNeeded()"></a>openZygoteSocketIfNeeded()</h3><p>先来看看 <code>openZygoteSocketIfNeeded()</code> 方法。</p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">&gt; ZygoteProcess.java</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">private</span> ZygoteState <span class="hljs-title">openZygoteSocketIfNeeded</span><span class="hljs-params">(String abi)</span> <span class="hljs-keyword">throws</span> ZygoteStartFailedEx </span>&#123;</span><br><span class="line">    Preconditions.checkState(Thread.holdsLock(mLock), <span class="hljs-string">"ZygoteProcess lock not held"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="hljs-comment">// 未连接或者连接已关闭</span></span><br><span class="line">    <span class="hljs-keyword">if</span> (primaryZygoteState == <span class="hljs-keyword">null</span> || primaryZygoteState.isClosed()) &#123;</span><br><span class="line">        <span class="hljs-keyword">try</span> &#123;</span><br><span class="line">            <span class="hljs-comment">// 开启 socket 连接</span></span><br><span class="line">            primaryZygoteState = ZygoteState.connect(mSocket);</span><br><span class="line">        &#125; <span class="hljs-keyword">catch</span> (IOException ioe) &#123;</span><br><span class="line">            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> ZygoteStartFailedEx(<span class="hljs-string">"Error connecting to primary zygote"</span>, ioe);</span><br><span class="line">        &#125;</span><br><span class="line">        maybeSetApiBlacklistExemptions(primaryZygoteState, <span class="hljs-keyword">false</span>);</span><br><span class="line">        maybeSetHiddenApiAccessLogSampleRate(primaryZygoteState);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="hljs-keyword">if</span> (primaryZygoteState.matches(abi)) &#123;</span><br><span class="line">        <span class="hljs-keyword">return</span> primaryZygoteState;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-comment">// 当主 zygote 没有匹配成功，尝试 connect 第二个 zygote</span></span><br><span class="line">    <span class="hljs-keyword">if</span> (secondaryZygoteState == <span class="hljs-keyword">null</span> || secondaryZygoteState.isClosed()) &#123;</span><br><span class="line">        <span class="hljs-keyword">try</span> &#123;</span><br><span class="line">            secondaryZygoteState = ZygoteState.connect(mSecondarySocket);</span><br><span class="line">        &#125; <span class="hljs-keyword">catch</span> (IOException ioe) &#123;</span><br><span class="line">            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> ZygoteStartFailedEx(<span class="hljs-string">"Error connecting to secondary zygote"</span>, ioe);</span><br><span class="line">        &#125;</span><br><span class="line">        maybeSetApiBlacklistExemptions(secondaryZygoteState, <span class="hljs-keyword">false</span>);</span><br><span class="line">        maybeSetHiddenApiAccessLogSampleRate(secondaryZygoteState);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">if</span> (secondaryZygoteState.matches(abi)) &#123;</span><br><span class="line">        <span class="hljs-keyword">return</span> secondaryZygoteState;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> ZygoteStartFailedEx(<span class="hljs-string">"Unsupported zygote ABI: "</span> + abi);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p> 如果与 Zygote 进程的 socket 连接未开启，则尝试开启，可能会产生阻塞和重试。连接调用的是 <code>ZygoteState.connect()</code> 方法，<code>ZygoteState</code> 是 <code>ZygoteProcess</code> 的内部类。</p>
+ <figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"> &gt; ZygoteProcess.java</span><br><span class="line"></span><br><span class="line"> <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ZygoteState</span> </span>&#123;</span><br><span class="line">        <span class="hljs-keyword">final</span> LocalSocket socket;</span><br><span class="line">        <span class="hljs-keyword">final</span> DataInputStream inputStream;</span><br><span class="line">        <span class="hljs-keyword">final</span> BufferedWriter writer;</span><br><span class="line">        <span class="hljs-keyword">final</span> List&lt;String&gt; abiList;</span><br><span class="line"></span><br><span class="line">        <span class="hljs-keyword">boolean</span> mClosed;</span><br><span class="line"></span><br><span class="line">        <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-title">ZygoteState</span><span class="hljs-params">(LocalSocket socket, DataInputStream inputStream,</span></span></span><br><span class="line"><span class="hljs-function"><span class="hljs-params">                BufferedWriter writer, List&lt;String&gt; abiList)</span> </span>&#123;</span><br><span class="line">            <span class="hljs-keyword">this</span>.socket = socket;</span><br><span class="line">            <span class="hljs-keyword">this</span>.inputStream = inputStream;</span><br><span class="line">            <span class="hljs-keyword">this</span>.writer = writer;</span><br><span class="line">            <span class="hljs-keyword">this</span>.abiList = abiList;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> ZygoteState <span class="hljs-title">connect</span><span class="hljs-params">(LocalSocketAddress address)</span> <span class="hljs-keyword">throws</span> IOException </span>&#123;</span><br><span class="line">            DataInputStream zygoteInputStream = <span class="hljs-keyword">null</span>;</span><br><span class="line">            BufferedWriter zygoteWriter = <span class="hljs-keyword">null</span>;</span><br><span class="line">            <span class="hljs-keyword">final</span> LocalSocket zygoteSocket = <span class="hljs-keyword">new</span> LocalSocket();</span><br><span class="line"></span><br><span class="line">            <span class="hljs-keyword">try</span> &#123;</span><br><span class="line">                zygoteSocket.connect(address);</span><br><span class="line"></span><br><span class="line">                zygoteInputStream = <span class="hljs-keyword">new</span> DataInputStream(zygoteSocket.getInputStream());</span><br><span class="line"></span><br><span class="line">                zygoteWriter = <span class="hljs-keyword">new</span> BufferedWriter(<span class="hljs-keyword">new</span> OutputStreamWriter(</span><br><span class="line">                        zygoteSocket.getOutputStream()), <span class="hljs-number">256</span>);</span><br><span class="line">            &#125; <span class="hljs-keyword">catch</span> (IOException ex) &#123;</span><br><span class="line">                <span class="hljs-keyword">try</span> &#123;</span><br><span class="line">                    zygoteSocket.close();</span><br><span class="line">                &#125; <span class="hljs-keyword">catch</span> (IOException ignore) &#123;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="hljs-keyword">throw</span> ex;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            String abiListString = getAbiList(zygoteWriter, zygoteInputStream);</span><br><span class="line">            Log.i(<span class="hljs-string">"Zygote"</span>, <span class="hljs-string">"Process: zygote socket "</span> + address.getNamespace() + <span class="hljs-string">"/"</span></span><br><span class="line">                    + address.getName() + <span class="hljs-string">" opened, supported ABIS: "</span> + abiListString);</span><br><span class="line"></span><br><span class="line">            <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> ZygoteState(zygoteSocket, zygoteInputStream, zygoteWriter,</span><br><span class="line">                    Arrays.asList(abiListString.split(<span class="hljs-string">","</span>)));</span><br><span class="line">        &#125;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p> 通过 socket 连接 Zygote 远程服务端。</p>
+<p> 再回头看之前的 <code>zygoteSendArgsAndGetResult()</code> 方法。</p>
+<h3 id="zygoteSendArgsAndGetResult"><a href="#zygoteSendArgsAndGetResult" class="headerlink" title="zygoteSendArgsAndGetResult()"></a>zygoteSendArgsAndGetResult()</h3> <figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">  &gt; ZygoteProcess.java</span><br><span class="line"></span><br><span class="line"> <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> Process.<span class="hljs-function">ProcessStartResult <span class="hljs-title">zygoteSendArgsAndGetResult</span><span class="hljs-params">(</span></span></span><br><span class="line"><span class="hljs-function"><span class="hljs-params">        ZygoteState zygoteState, ArrayList&lt;String&gt; args)</span></span></span><br><span class="line"><span class="hljs-function">        <span class="hljs-keyword">throws</span> ZygoteStartFailedEx </span>&#123;</span><br><span class="line">    <span class="hljs-keyword">try</span> &#123;</span><br><span class="line">        ...</span><br><span class="line">        <span class="hljs-keyword">final</span> BufferedWriter writer = zygoteState.writer;</span><br><span class="line">        <span class="hljs-keyword">final</span> DataInputStream inputStream = zygoteState.inputStream;</span><br><span class="line"></span><br><span class="line">        writer.write(Integer.toString(args.size()));</span><br><span class="line">        writer.newLine();</span><br><span class="line"></span><br><span class="line">        <span class="hljs-comment">// 向 zygote 进程发送参数</span></span><br><span class="line">        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; sz; i++) &#123;</span><br><span class="line">            String arg = args.get(i);</span><br><span class="line">            writer.write(arg);</span><br><span class="line">            writer.newLine();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        writer.flush();</span><br><span class="line"></span><br><span class="line">        <span class="hljs-comment">// 是不是应该有一个超时时间？</span></span><br><span class="line">        Process.ProcessStartResult result = <span class="hljs-keyword">new</span> Process.ProcessStartResult();</span><br><span class="line"></span><br><span class="line">        <span class="hljs-comment">// Always read the entire result from the input stream to avoid leaving</span></span><br><span class="line">        <span class="hljs-comment">// bytes in the stream for future process starts to accidentally stumble</span></span><br><span class="line">        <span class="hljs-comment">// upon.</span></span><br><span class="line">        <span class="hljs-comment">// 读取 zygote 进程返回的子进程 pid</span></span><br><span class="line">        result.pid = inputStream.readInt();</span><br><span class="line">        result.usingWrapper = inputStream.readBoolean();</span><br><span class="line"></span><br><span class="line">        <span class="hljs-keyword">if</span> (result.pid &lt; <span class="hljs-number">0</span>) &#123; <span class="hljs-comment">// pid 小于 0 ，fork 失败</span></span><br><span class="line">            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> ZygoteStartFailedEx(<span class="hljs-string">"fork() failed"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="hljs-keyword">return</span> result;</span><br><span class="line">    &#125; <span class="hljs-keyword">catch</span> (IOException ex) &#123;</span><br><span class="line">        zygoteState.close();</span><br><span class="line">        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> ZygoteStartFailedEx(ex);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p> 通过 socket 发送请求参数，然后等待 Zygote 进程返回子进程 pid 。客户端的工作到这里就暂时完成了，我们再追踪到服务端，看看服务端是如何处理客户端请求的。</p>
+<h2 id="Zygote-处理客户端请求"><a href="#Zygote-处理客户端请求" class="headerlink" title="Zygote 处理客户端请求"></a>Zygote 处理客户端请求</h2><p><code>Zygote</code> 处理客户端请求的代码在 <code>ZygoteServer.runSelectLoop()</code> 方法中。</p>
+ <figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"> &gt; ZygoteServer.java</span><br><span class="line"></span><br><span class="line"> <span class="hljs-function">Runnable <span class="hljs-title">runSelectLoop</span><span class="hljs-params">(String abiList)</span> </span>&#123;</span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">while</span> (<span class="hljs-keyword">true</span>) &#123;</span><br><span class="line">       ...</span><br><span class="line">        <span class="hljs-keyword">try</span> &#123;</span><br><span class="line">            <span class="hljs-comment">// 有事件来时往下执行，没有时就阻塞</span></span><br><span class="line">            Os.poll(pollFds, -<span class="hljs-number">1</span>);</span><br><span class="line">        &#125; <span class="hljs-keyword">catch</span> (ErrnoException ex) &#123;</span><br><span class="line">            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> RuntimeException(<span class="hljs-string">"poll failed"</span>, ex);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = pollFds.length - <span class="hljs-number">1</span>; i &gt;= <span class="hljs-number">0</span>; --i) &#123;</span><br><span class="line">            <span class="hljs-keyword">if</span> ((pollFds[i].revents &amp; POLLIN) == <span class="hljs-number">0</span>) &#123;</span><br><span class="line">                <span class="hljs-keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="hljs-keyword">if</span> (i == <span class="hljs-number">0</span>) &#123; <span class="hljs-comment">// 有新客户端连接</span></span><br><span class="line">                ZygoteConnection newPeer = acceptCommandPeer(abiList);</span><br><span class="line">                peers.add(newPeer);</span><br><span class="line">                fds.add(newPeer.getFileDesciptor());</span><br><span class="line">            &#125; <span class="hljs-keyword">else</span> &#123; <span class="hljs-comment">// 处理客户端请求</span></span><br><span class="line">                <span class="hljs-keyword">try</span> &#123;</span><br><span class="line">                    ZygoteConnection connection = peers.get(i);</span><br><span class="line">                    <span class="hljs-comment">// fork 子进程，并返回包含子进程 main() 函数的 Runnable 对象</span></span><br><span class="line">                    <span class="hljs-keyword">final</span> Runnable command = connection.processOneCommand(<span class="hljs-keyword">this</span>);</span><br><span class="line"></span><br><span class="line">                    <span class="hljs-keyword">if</span> (mIsForkChild) &#123;</span><br><span class="line">                        <span class="hljs-comment">// 位于子进程</span></span><br><span class="line">                        <span class="hljs-keyword">if</span> (command == <span class="hljs-keyword">null</span>) &#123;</span><br><span class="line">                            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> IllegalStateException(<span class="hljs-string">"command == null"</span>);</span><br><span class="line">                        &#125;</span><br><span class="line"></span><br><span class="line">                        <span class="hljs-keyword">return</span> command;</span><br><span class="line">                    &#125; <span class="hljs-keyword">else</span> &#123;</span><br><span class="line">                        <span class="hljs-comment">// 位于父进程</span></span><br><span class="line">                        <span class="hljs-keyword">if</span> (command != <span class="hljs-keyword">null</span>) &#123;</span><br><span class="line">                            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> IllegalStateException(<span class="hljs-string">"command != null"</span>);</span><br><span class="line">                        &#125;</span><br><span class="line"></span><br><span class="line">                        <span class="hljs-keyword">if</span> (connection.isClosedByPeer()) &#123;</span><br><span class="line">                            connection.closeSocket();</span><br><span class="line">                            peers.remove(i);</span><br><span class="line">                            fds.remove(i);</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125; <span class="hljs-keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                    ...</span><br><span class="line">                &#125; <span class="hljs-keyword">finally</span> &#123;</span><br><span class="line">                    mIsForkChild = <span class="hljs-keyword">false</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>acceptCommandPeer()</code> 方法用来响应新客户端的 socket 连接请求。<code>processOneCommand()</code> 方法用来处理客户端的一般请求。</p>
+<h3 id="processOneCommand"><a href="#processOneCommand" class="headerlink" title="processOneCommand()"></a>processOneCommand()</h3><figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">&gt; ZygoteConnection.java</span><br><span class="line"></span><br><span class="line"><span class="hljs-function">Runnable <span class="hljs-title">processOneCommand</span><span class="hljs-params">(ZygoteServer zygoteServer)</span> </span>&#123;</span><br><span class="line">    String args[];</span><br><span class="line">    Arguments parsedArgs = <span class="hljs-keyword">null</span>;</span><br><span class="line">    FileDescriptor[] descriptors;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">try</span> &#123;</span><br><span class="line">        <span class="hljs-comment">// 1. 读取 socket 客户端发送过来的参数列表</span></span><br><span class="line">        args = readArgumentList();</span><br><span class="line">        descriptors = mSocket.getAncillaryFileDescriptors();</span><br><span class="line">    &#125; <span class="hljs-keyword">catch</span> (IOException ex) &#123;</span><br><span class="line">        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> IllegalStateException(<span class="hljs-string">"IOException on command socket"</span>, ex);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    <span class="hljs-comment">// 2. fork 子进程</span></span><br><span class="line">    pid = Zygote.forkAndSpecialize(parsedArgs.uid, parsedArgs.gid, parsedArgs.gids,</span><br><span class="line">            parsedArgs.runtimeFlags, rlimits, parsedArgs.mountExternal, parsedArgs.seInfo,</span><br><span class="line">            parsedArgs.niceName, fdsToClose, fdsToIgnore, parsedArgs.startChildZygote,</span><br><span class="line">            parsedArgs.instructionSet, parsedArgs.appDataDir);</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">try</span> &#123;</span><br><span class="line">        <span class="hljs-keyword">if</span> (pid == <span class="hljs-number">0</span>) &#123;</span><br><span class="line">            <span class="hljs-comment">// 处于进子进程</span></span><br><span class="line">            zygoteServer.setForkChild();</span><br><span class="line">            <span class="hljs-comment">// 关闭服务端 socket</span></span><br><span class="line">            zygoteServer.closeServerSocket();</span><br><span class="line">            IoUtils.closeQuietly(serverPipeFd);</span><br><span class="line">            serverPipeFd = <span class="hljs-keyword">null</span>;</span><br><span class="line">            <span class="hljs-comment">// 3. 处理子进程事务</span></span><br><span class="line">            <span class="hljs-keyword">return</span> handleChildProc(parsedArgs, descriptors, childPipeFd,</span><br><span class="line">                    parsedArgs.startChildZygote);</span><br><span class="line">        &#125; <span class="hljs-keyword">else</span> &#123;</span><br><span class="line">            <span class="hljs-comment">// 处于 Zygote 进程</span></span><br><span class="line">            IoUtils.closeQuietly(childPipeFd);</span><br><span class="line">            childPipeFd = <span class="hljs-keyword">null</span>;</span><br><span class="line">            <span class="hljs-comment">// 4. 处理父进程事务</span></span><br><span class="line">            handleParentProc(pid, descriptors, serverPipeFd);</span><br><span class="line">            <span class="hljs-keyword">return</span> <span class="hljs-keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="hljs-keyword">finally</span> &#123;</span><br><span class="line">        IoUtils.closeQuietly(childPipeFd);</span><br><span class="line">        IoUtils.closeQuietly(serverPipeFd);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>processOneCommand()</code> 方法大致可以分为五步，下面逐步分析。</p>
+<h4 id="readArgumentList"><a href="#readArgumentList" class="headerlink" title="readArgumentList()"></a>readArgumentList()</h4><figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">&gt; ZygoteConnection.java</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">private</span> String[] readArgumentList()</span><br><span class="line">        <span class="hljs-keyword">throws</span> IOException &#123;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">int</span> argc;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">try</span> &#123;</span><br><span class="line">        <span class="hljs-comment">// 逐行读取参数</span></span><br><span class="line">        String s = mSocketReader.readLine();</span><br><span class="line"></span><br><span class="line">        <span class="hljs-keyword">if</span> (s == <span class="hljs-keyword">null</span>) &#123;</span><br><span class="line">            <span class="hljs-comment">// EOF reached.</span></span><br><span class="line">            <span class="hljs-keyword">return</span> <span class="hljs-keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        argc = Integer.parseInt(s);</span><br><span class="line">    &#125; <span class="hljs-keyword">catch</span> (NumberFormatException ex) &#123;</span><br><span class="line">        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> IOException(<span class="hljs-string">"invalid wire format"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-comment">// See bug 1092107: large argc can be used for a DOS attack</span></span><br><span class="line">    <span class="hljs-keyword">if</span> (argc &gt; MAX_ZYGOTE_ARGC) &#123;</span><br><span class="line">        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> IOException(<span class="hljs-string">"max arg count exceeded"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    String[] result = <span class="hljs-keyword">new</span> String[argc];</span><br><span class="line">    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; argc; i++) &#123;</span><br><span class="line">        result[i] = mSocketReader.readLine();</span><br><span class="line">        <span class="hljs-keyword">if</span> (result[i] == <span class="hljs-keyword">null</span>) &#123;</span><br><span class="line">            <span class="hljs-comment">// We got an unexpected EOF.</span></span><br><span class="line">            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> IOException(<span class="hljs-string">"truncated request"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>读取客户端发送过来的请求参数。</p>
+<h4 id="forkAndSpecialize"><a href="#forkAndSpecialize" class="headerlink" title="forkAndSpecialize()"></a>forkAndSpecialize()</h4><figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&gt; Zygote.java</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span> <span class="hljs-title">forkAndSpecialize</span><span class="hljs-params">(<span class="hljs-keyword">int</span> uid, <span class="hljs-keyword">int</span> gid, <span class="hljs-keyword">int</span>[] gids, <span class="hljs-keyword">int</span> runtimeFlags,</span></span></span><br><span class="line"><span class="hljs-function"><span class="hljs-params">      <span class="hljs-keyword">int</span>[][] rlimits, <span class="hljs-keyword">int</span> mountExternal, String seInfo, String niceName, <span class="hljs-keyword">int</span>[] fdsToClose,</span></span></span><br><span class="line"><span class="hljs-function"><span class="hljs-params">      <span class="hljs-keyword">int</span>[] fdsToIgnore, <span class="hljs-keyword">boolean</span> startChildZygote, String instructionSet, String appDataDir)</span> </span>&#123;</span><br><span class="line">    VM_HOOKS.preFork();</span><br><span class="line">    <span class="hljs-comment">// Resets nice priority for zygote process.</span></span><br><span class="line">    resetNicePriority();</span><br><span class="line">    <span class="hljs-keyword">int</span> pid = nativeForkAndSpecialize(</span><br><span class="line">              uid, gid, gids, runtimeFlags, rlimits, mountExternal, seInfo, niceName, fdsToClose,</span><br><span class="line">              fdsToIgnore, startChildZygote, instructionSet, appDataDir);</span><br><span class="line">    <span class="hljs-comment">// Enable tracing as soon as possible for the child process.</span></span><br><span class="line">    <span class="hljs-keyword">if</span> (pid == <span class="hljs-number">0</span>) &#123;</span><br><span class="line">        Trace.setTracingEnabled(<span class="hljs-keyword">true</span>, runtimeFlags);</span><br><span class="line"></span><br><span class="line">        <span class="hljs-comment">// Note that this event ends at the end of handleChildProc,</span></span><br><span class="line">        Trace.traceBegin(Trace.TRACE_TAG_ACTIVITY_MANAGER, <span class="hljs-string">"PostFork"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    VM_HOOKS.postForkCommon();</span><br><span class="line">    <span class="hljs-keyword">return</span> pid;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>nativeForkAndSpecialize()</code> 是一个 native 方法，在底层 fork 了一个新进程，并返回其 pid。不要忘记了这里的 <strong>一次fork，两次返回</strong> 。<code>pid &gt; 0</code>  说明还是父进程。<code>pid = 0</code> 说明进入了子进程。子进程中会调用 <code>handleChildProc</code>，而父进程中会调用 <code>handleParentProc()</code>。</p>
+<h4 id="handleChildProc"><a href="#handleChildProc" class="headerlink" title="handleChildProc()"></a>handleChildProc()</h4><figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">&gt; ZygoteConnection.java</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">private</span> Runnable <span class="hljs-title">handleChildProc</span><span class="hljs-params">(Arguments parsedArgs, FileDescriptor[] descriptors,</span></span></span><br><span class="line"><span class="hljs-function"><span class="hljs-params">        FileDescriptor pipeFd, <span class="hljs-keyword">boolean</span> isZygote)</span> </span>&#123;</span><br><span class="line">    closeSocket(); <span class="hljs-comment">// 关闭 socket 连接</span></span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">if</span> (parsedArgs.niceName != <span class="hljs-keyword">null</span>) &#123;</span><br><span class="line">        <span class="hljs-comment">// 设置进程名</span></span><br><span class="line">        Process.setArgV0(parsedArgs.niceName);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">if</span> (parsedArgs.invokeWith != <span class="hljs-keyword">null</span>) &#123;</span><br><span class="line">        WrapperInit.execApplication(parsedArgs.invokeWith,</span><br><span class="line">                parsedArgs.niceName, parsedArgs.targetSdkVersion,</span><br><span class="line">                VMRuntime.getCurrentInstructionSet(),</span><br><span class="line">                pipeFd, parsedArgs.remainingArgs);</span><br><span class="line"></span><br><span class="line">        <span class="hljs-comment">// Should not get here.</span></span><br><span class="line">        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> IllegalStateException(<span class="hljs-string">"WrapperInit.execApplication unexpectedly returned"</span>);</span><br><span class="line">    &#125; <span class="hljs-keyword">else</span> &#123;</span><br><span class="line">        <span class="hljs-keyword">if</span> (!isZygote) &#123; <span class="hljs-comment">// 新建应用进程时 isZygote 参数为 false</span></span><br><span class="line">            <span class="hljs-keyword">return</span> ZygoteInit.zygoteInit(parsedArgs.targetSdkVersion, parsedArgs.remainingArgs,</span><br><span class="line">                    <span class="hljs-keyword">null</span> <span class="hljs-comment">/* classLoader */</span>);</span><br><span class="line">        &#125; <span class="hljs-keyword">else</span> &#123;</span><br><span class="line">            <span class="hljs-keyword">return</span> ZygoteInit.childZygoteInit(parsedArgs.targetSdkVersion,</span><br><span class="line">                    parsedArgs.remainingArgs, <span class="hljs-keyword">null</span> <span class="hljs-comment">/* classLoader */</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当看到 <code>ZygoteInit.zygoteInit()</code> 时你应该感觉很熟悉了，接下来的流程就是：</p>
+<blockquote>
+<p><code>ZygoteInit.zygoteInit()</code> -&gt; <code>RuntimeInit.applicationInit()</code> -&gt; <code>findStaticMain()</code></p>
+</blockquote>
+<p>和 <code>SystemServer</code> 进程的创建流程一致。这里要找的 main 方法就是 <code>ActivityThrad.main()</code> 。<code>ActivityThread</code> 虽然并不是一个线程，但你可以把它理解为应用的主线程。</p>
+<h3 id="handleParentProc"><a href="#handleParentProc" class="headerlink" title="handleParentProc()"></a>handleParentProc()</h3><figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br></pre></td><td class="code"><pre><span class="line">&gt; ZygoteConnection.java</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">handleParentProc</span><span class="hljs-params">(<span class="hljs-keyword">int</span> pid, FileDescriptor[] descriptors, FileDescriptor pipeFd)</span> </span>&#123;</span><br><span class="line">        <span class="hljs-keyword">if</span> (pid &gt; <span class="hljs-number">0</span>) &#123;</span><br><span class="line">            setChildPgid(pid);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="hljs-keyword">if</span> (descriptors != <span class="hljs-keyword">null</span>) &#123;</span><br><span class="line">            <span class="hljs-keyword">for</span> (FileDescriptor fd: descriptors) &#123;</span><br><span class="line">                IoUtils.closeQuietly(fd);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="hljs-keyword">boolean</span> usingWrapper = <span class="hljs-keyword">false</span>;</span><br><span class="line">        <span class="hljs-keyword">if</span> (pipeFd != <span class="hljs-keyword">null</span> &amp;&amp; pid &gt; <span class="hljs-number">0</span>) &#123;</span><br><span class="line">            <span class="hljs-keyword">int</span> innerPid = -<span class="hljs-number">1</span>;</span><br><span class="line">            <span class="hljs-keyword">try</span> &#123;</span><br><span class="line">                <span class="hljs-comment">// Do a busy loop here. We can't guarantee that a failure (and thus an exception</span></span><br><span class="line">                <span class="hljs-comment">// bail) happens in a timely manner.</span></span><br><span class="line">                <span class="hljs-keyword">final</span> <span class="hljs-keyword">int</span> BYTES_REQUIRED = <span class="hljs-number">4</span>;  <span class="hljs-comment">// Bytes in an int.</span></span><br><span class="line"></span><br><span class="line">                StructPollfd fds[] = <span class="hljs-keyword">new</span> StructPollfd[] &#123;</span><br><span class="line">                        <span class="hljs-keyword">new</span> StructPollfd()</span><br><span class="line">                &#125;;</span><br><span class="line"></span><br><span class="line">                <span class="hljs-keyword">byte</span> data[] = <span class="hljs-keyword">new</span> <span class="hljs-keyword">byte</span>[BYTES_REQUIRED];</span><br><span class="line"></span><br><span class="line">                <span class="hljs-keyword">int</span> remainingSleepTime = WRAPPED_PID_TIMEOUT_MILLIS;</span><br><span class="line">                <span class="hljs-keyword">int</span> dataIndex = <span class="hljs-number">0</span>;</span><br><span class="line">                <span class="hljs-keyword">long</span> startTime = System.nanoTime();</span><br><span class="line"></span><br><span class="line">                <span class="hljs-keyword">while</span> (dataIndex &lt; data.length &amp;&amp; remainingSleepTime &gt; <span class="hljs-number">0</span>) &#123;</span><br><span class="line">                    fds[<span class="hljs-number">0</span>].fd = pipeFd;</span><br><span class="line">                    fds[<span class="hljs-number">0</span>].events = (<span class="hljs-keyword">short</span>) POLLIN;</span><br><span class="line">                    fds[<span class="hljs-number">0</span>].revents = <span class="hljs-number">0</span>;</span><br><span class="line">                    fds[<span class="hljs-number">0</span>].userData = <span class="hljs-keyword">null</span>;</span><br><span class="line"></span><br><span class="line">                    <span class="hljs-keyword">int</span> res = android.system.Os.poll(fds, remainingSleepTime);</span><br><span class="line">                    <span class="hljs-keyword">long</span> endTime = System.nanoTime();</span><br><span class="line">                    <span class="hljs-keyword">int</span> elapsedTimeMs = (<span class="hljs-keyword">int</span>)((endTime - startTime) / <span class="hljs-number">1000000l</span>);</span><br><span class="line">                    remainingSleepTime = WRAPPED_PID_TIMEOUT_MILLIS - elapsedTimeMs;</span><br><span class="line"></span><br><span class="line">                    <span class="hljs-keyword">if</span> (res &gt; <span class="hljs-number">0</span>) &#123;</span><br><span class="line">                        <span class="hljs-keyword">if</span> ((fds[<span class="hljs-number">0</span>].revents &amp; POLLIN) != <span class="hljs-number">0</span>) &#123;</span><br><span class="line">                            <span class="hljs-comment">// Only read one byte, so as not to block.</span></span><br><span class="line">                            <span class="hljs-keyword">int</span> readBytes = android.system.Os.read(pipeFd, data, dataIndex, <span class="hljs-number">1</span>);</span><br><span class="line">                            <span class="hljs-keyword">if</span> (readBytes &lt; <span class="hljs-number">0</span>) &#123;</span><br><span class="line">                                <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> RuntimeException(<span class="hljs-string">"Some error"</span>);</span><br><span class="line">                            &#125;</span><br><span class="line">                            dataIndex += readBytes;</span><br><span class="line">                        &#125; <span class="hljs-keyword">else</span> &#123;</span><br><span class="line">                            <span class="hljs-comment">// Error case. revents should contain one of the error bits.</span></span><br><span class="line">                            <span class="hljs-keyword">break</span>;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (res == <span class="hljs-number">0</span>) &#123;</span><br><span class="line">                        Log.w(TAG, <span class="hljs-string">"Timed out waiting for child."</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="hljs-keyword">if</span> (dataIndex == data.length) &#123;</span><br><span class="line">                    DataInputStream is = <span class="hljs-keyword">new</span> DataInputStream(<span class="hljs-keyword">new</span> ByteArrayInputStream(data));</span><br><span class="line">                    innerPid = is.readInt();</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="hljs-keyword">if</span> (innerPid == -<span class="hljs-number">1</span>) &#123;</span><br><span class="line">                    Log.w(TAG, <span class="hljs-string">"Error reading pid from wrapped process, child may have died"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="hljs-keyword">catch</span> (Exception ex) &#123;</span><br><span class="line">                Log.w(TAG, <span class="hljs-string">"Error reading pid from wrapped process, child may have died"</span>, ex);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="hljs-comment">// Ensure that the pid reported by the wrapped process is either the</span></span><br><span class="line">            <span class="hljs-comment">// child process that we forked, or a descendant of it.</span></span><br><span class="line">            <span class="hljs-keyword">if</span> (innerPid &gt; <span class="hljs-number">0</span>) &#123;</span><br><span class="line">                <span class="hljs-keyword">int</span> parentPid = innerPid;</span><br><span class="line">                <span class="hljs-keyword">while</span> (parentPid &gt; <span class="hljs-number">0</span> &amp;&amp; parentPid != pid) &#123;</span><br><span class="line">                    parentPid = Process.getParentPid(parentPid);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="hljs-keyword">if</span> (parentPid &gt; <span class="hljs-number">0</span>) &#123;</span><br><span class="line">                    Log.i(TAG, <span class="hljs-string">"Wrapped process has pid "</span> + innerPid);</span><br><span class="line">                    pid = innerPid;</span><br><span class="line">                    usingWrapper = <span class="hljs-keyword">true</span>;</span><br><span class="line">                &#125; <span class="hljs-keyword">else</span> &#123;</span><br><span class="line">                    Log.w(TAG, <span class="hljs-string">"Wrapped process reported a pid that is not a child of "</span></span><br><span class="line">                            + <span class="hljs-string">"the process that we forked: childPid="</span> + pid</span><br><span class="line">                            + <span class="hljs-string">" innerPid="</span> + innerPid);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="hljs-keyword">try</span> &#123;</span><br><span class="line">            mSocketOutStream.writeInt(pid);</span><br><span class="line">            mSocketOutStream.writeBoolean(usingWrapper);</span><br><span class="line">        &#125; <span class="hljs-keyword">catch</span> (IOException ex) &#123;</span><br><span class="line">            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> IllegalStateException(<span class="hljs-string">"Error writing to command socket"</span>, ex);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>主要进行一些资源清理的工作。到这里，子进程就创建完成了。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p><img src="https://user-gold-cdn.xitu.io/2019/10/15/16dcffa1150587ce?w=1211&h=762&f=png&s=72152" alt></p>
+<ol>
+<li>调用 <code>Process.start()</code> 创建应用进程</li>
+<li><code>ZygoteProcess</code> 负责和 <code>Zygote</code> 进程建立 socket 连接，并将创建进程需要的参数发送给 Zygote 的 socket 服务端</li>
+<li><code>Zygote</code> 服务端接收到参数之后调用 <code>ZygoteConnection.processOneCommand()</code> 处理参数，并 fork 进程</li>
+<li>最后通过 <code>findStaticMain()</code> 找到 <code>ActivityThread</code> 类的 main() 方法并执行，子进程就启动了</li>
+</ol>
+<h2 id="预告"><a href="#预告" class="headerlink" title="预告"></a>预告</h2><p>到现在为止已经解析了 <code>Zygote</code> 进程 ，<code>SystemServer</code> 进程，以及应用进程的创建。下一篇的内容是和应用最密切相关的系统服务 <strong>ActivityManagerService</strong> , 来看看它在 <code>SystemServer</code> 中是如何被创建和启动的，敬请期待！</p>
+<blockquote>
+<p>文章首发微信公众号： <strong><code>秉心说</code></strong> ， 专注 Java 、 Android 原创知识分享，LeetCode 题解。</p>
+<p>更多最新原创文章，扫码关注我吧！</p>
+</blockquote>
+<p><img src="https://user-gold-cdn.xitu.io/2019/4/27/16a5f352eab602c4?w=2800&h=800&f=jpeg&s=178470" alt></p>
+
+        </div>
+        
+        <hr style="height:1px;margin:1rem 0"/>
+        <div class="level is-size-7 is-uppercase">
+            <div class="level-start">
+                <div class="level-item">
+                    <!-- <span class="is-size-6 has-text-grey has-mr-7">#</span> -->
+                    <i class="fas fa-tags has-text-grey"></i>&nbsp;
+                    <a class="has-link-grey -link" href="/tags/Process/">Process</a>,&nbsp;<a class="has-link-grey -link" href="/tags/Zygote/">Zygote</a>
+                </div>
+            </div>
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+<div class="card">
+    <div class="card-content">
+        <h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3>
+        <div class="buttons is-centered">
+            
+                
+<div class="notification is-danger">
+    You forgot to set the <code>qrcode</code> for Alipay. Please set it in <code>_config.yml</code>.
+</div>
+
+                
+                
+<div class="notification is-danger">
+    You forgot to set the <code>qrcode</code> for Wechat. Please set it in <code>_config.yml</code>.
+</div>
+
+                
+                <!-- Visit https://www.paypal.com/donate/buttons/ to get your donate button -->
+
+<div class="notification is-danger">
+    You forgot to set the <code>business</code> and <code>currency_code</code> for Paypal. Please set it in <code>_config.yml</code>.
+</div>
+
+                
+                
+<div class="notification is-danger">
+    You forgot to set the <code>url</code> Patreon. Please set it in <code>_config.yml</code>.
+</div>
+
+                
+        </div>
+    </div>
+</div>
+
+
+
+<div class="card card-transparent">
+    <div class="level post-navigation is-flex-wrap is-mobile">
+        
+        
+        <div class="level-end">
+            <a class="level level-item has-link-grey  article-nav-next" href="/2019/10/13/system_server/">
+                <span class="level-item">Zygote家 的大儿子 —— SystemServer</span>
+                <i class="level-item fas fa-chevron-right"></i>
+            </a>
+        </div>
+        
+    </div>
+</div>
+
+
+</div>
+                
+
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen  has-order-1 column-left ">
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <nav class="level">
+            <div class="level-item has-text-centered" style="flex-shrink: 1">
+                <div>
+                    
+                    <figure class="image is-128x128 has-mb-6">
+                        <img class="" src="/images/avatar.png" alt="路遥">
+                    </figure>
+                    
+                    <p class="is-size-4 is-block">
+                        路遥
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-block">
+                        luyao
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-flex is-flex-center has-text-grey">
+                        <i class="fas fa-map-marker-alt has-mr-7"></i>
+                        <span>China,Shanghai</span>
+                    </p>
+                    
+                </div>
+            </div>
+        </nav>
+        <!-- <nav class="level is-mobile"> -->
+        <nav class="level menu-list is-mobile" style="margin-bottom:1rem">
+            <div class="level-item has-text-centered is-marginless">
+                <a href="/archives/">
+                    <p class="heading">
+                        文章
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        4
+                    </p>
+                </a>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <a href="/categories/">
+                    <p class="heading">
+                        分类
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        2
+                    </p>
+                </a>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <a href="/tags/">
+                    <p class="heading">
+                        标签
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        4
+                    </p>
+                </a>
+            </div>
+        </nav>
+        
+        <div class="level">
+            <a class="level-item button is-link is-rounded" href="https://github.com/lulululbj" target="_blank">
+                    <i class="fab fa-github"></i>&nbsp;&nbsp;关注我</a>
+        </div>
+        
+        
+        
+        <div class="level is-mobile">
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="Github" href="https://github.com/lulululbj">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="Facebook" href="https://facebook.com">
+                
+                <i class="fab fa-facebook"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="Twitter" href="https://twitter.com">
+                
+                <i class="fab fa-twitter"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="Dribbble" href="https://dribbble.com">
+                
+                <i class="fab fa-dribbble"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="RSS" href="/">
+                
+                <i class="fas fa-rss"></i>
+                
+            </a>
+            
+        </div>
+        
+    </div>
+</div>
+    
+        
+<!-- <div class="card widget" id="toc"> -->
+<div class="card widget column-left is-sticky" id="toc">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                目录
+            </h3>
+            <ul class="menu-list"><li>
+        <a class="is-flex" href="#客户端发送请求">
+        <span class="has-mr-6">1</span>
+        <span>客户端发送请求</span>
+        </a><ul class="menu-list"><li>
+        <a class="is-flex" href="#Process-startProcess">
+        <span class="has-mr-6">1.1</span>
+        <span>Process.startProcess()</span>
+        </a></li><li>
+        <a class="is-flex" href="#startViaZygote">
+        <span class="has-mr-6">1.2</span>
+        <span>startViaZygote()</span>
+        </a></li><li>
+        <a class="is-flex" href="#openZygoteSocketIfNeeded">
+        <span class="has-mr-6">1.3</span>
+        <span>openZygoteSocketIfNeeded()</span>
+        </a></li><li>
+        <a class="is-flex" href="#zygoteSendArgsAndGetResult">
+        <span class="has-mr-6">1.4</span>
+        <span>zygoteSendArgsAndGetResult()</span>
+        </a></li></ul></li><li>
+        <a class="is-flex" href="#Zygote-处理客户端请求">
+        <span class="has-mr-6">2</span>
+        <span>Zygote 处理客户端请求</span>
+        </a><ul class="menu-list"><li>
+        <a class="is-flex" href="#processOneCommand">
+        <span class="has-mr-6">2.1</span>
+        <span>processOneCommand()</span>
+        </a><ul class="menu-list"><li>
+        <a class="is-flex" href="#readArgumentList">
+        <span class="has-mr-6">2.1.1</span>
+        <span>readArgumentList()</span>
+        </a></li><li>
+        <a class="is-flex" href="#forkAndSpecialize">
+        <span class="has-mr-6">2.1.2</span>
+        <span>forkAndSpecialize()</span>
+        </a></li><li>
+        <a class="is-flex" href="#handleChildProc">
+        <span class="has-mr-6">2.1.3</span>
+        <span>handleChildProc()</span>
+        </a></li></ul></li><li>
+        <a class="is-flex" href="#handleParentProc">
+        <span class="has-mr-6">2.2</span>
+        <span>handleParentProc()</span>
+        </a></li></ul></li><li>
+        <a class="is-flex" href="#总结">
+        <span class="has-mr-6">3</span>
+        <span>总结</span>
+        </a></li><li>
+        <a class="is-flex" href="#预告">
+        <span class="has-mr-6">4</span>
+        <span>预告</span>
+        </a></li></ul>
+        </div>
+    </div>
+</div>
+    
+    
+        <div class="column-right-shadow is-hidden-widescreen ">
+        
+        </div>
+    
+</div>
+
+                
+            </div>
+        </div>
+    </section>
+    <footer class="footer">
+    <div class="container">
+        <div class="level">
+            <div class="level-start has-text-centered-mobile">
+                <a class="footer-logo is-block has-mb-6" href="/">
+                
+                    <img src="/images/logo.svg" alt="Android 世界中，谁喊醒了 Zygote ？" height="28">
+                
+                </a>
+                <p class="is-size-7">
+                &copy; 2019 路遥&nbsp;
+                Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> & <a
+                        href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank">Icarus</a>
+                
+                <br>
+				<span id="busuanzi_container_site_pv">
+                <span id="busuanzi_value_site_pv">0</span> 次访问
+                </span>
+                <span id="busuanzi_container_site_uv">
+                共 <span id="busuanzi_value_site_uv">0</span> 个访客
+                </span>
+                
+                </p>
+            </div>
+            <div class="level-end">
+            
+                <div class="field has-addons is-flex-center-mobile has-mt-5-mobile is-flex-wrap is-flex-middle">
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Creative Commons" href="https://creativecommons.org/">
+                        
+                        <i class="fab fa-creative-commons"></i>
+                        
+                    </a>
+                </p>
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/">
+                        
+                        <i class="fab fa-creative-commons-by"></i>
+                        
+                    </a>
+                </p>
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                </p>
+                
+                </div>
+            
+            </div>
+        </div>
+    </div>
+</footer>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script>
+<script>moment.locale("zh-CN");</script>
+
+<script>
+var IcarusThemeSettings = {
+    article: {
+        highlight: {
+            clipboard: true,
+            fold: 'unfolded'
+        }
+    }
+};
+</script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script>
+
+
+
+    
+    
+<script src="/js/animation.js"></script>
+
+    
+    
+<script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script>
+<script src="/js/gallery.js" defer></script>
+
+    
+    
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update
+            my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.js" defer></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        });
+    });
+</script>
+
+    
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    MathJax.Hub.Config({
+        'HTML-CSS': {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+});
+</script>
+    
+    
+<a id="back-to-top" title="回到顶端" href="javascript:;">
+    <i class="fas fa-chevron-up"></i>
+</a>
+<script src="/js/back-to-top.js" defer></script>
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+
+<script src="/js/main.js" defer></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="想要查找什么..." />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(无标题)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/js/insight.js" defer></script>
+<link rel="stylesheet" href="/css/search.css">
+<link rel="stylesheet" href="/css/insight.css">
+    
+</body>
+</html>
