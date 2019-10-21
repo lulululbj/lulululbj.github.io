@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html  lang="zh">
+<head>
+    <meta charset="utf-8" />
+
+<meta name="generator" content="Hexo 3.9.0" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+<title>【Medium 万赞好文】ViewModel 和 LiveData：模式 + 反模式 - 路遥的博客</title>
+
+
+    <meta name="description" content="原文作者： Jose Alcérreca 原文地址： ViewModels and LiveData: Patterns + AntiPatterns 译者：秉心说">
+<meta name="keywords" content="架构,MVVM">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Medium 万赞好文】ViewModel 和 LiveData：模式 + 反模式">
+<meta property="og:url" content="http://sunluyao.com/2019/10/21/viewmodel_livedata_patterns_antiPatterns/index.html">
+<meta property="og:site_name" content="路遥的博客">
+<meta property="og:description" content="原文作者： Jose Alcérreca 原文地址： ViewModels and LiveData: Patterns + AntiPatterns 译者：秉心说">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://sunluyao.com/images/og_image.png">
+<meta property="og:updated_time" content="2019-10-21T15:32:34.804Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【Medium 万赞好文】ViewModel 和 LiveData：模式 + 反模式">
+<meta name="twitter:description" content="原文作者： Jose Alcérreca 原文地址： ViewModels and LiveData: Patterns + AntiPatterns 译者：秉心说">
+<meta name="twitter:image" content="http://sunluyao.com/images/og_image.png">
+
+
+
+
+
+
+
+<link rel="icon" href="/images/favicon.svg">
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.7.2/css/bulma.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,600|Source+Code+Pro">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css">
+
+
+    
+    
+<style>body>.footer,body>.navbar,body>.section{opacity:0}</style>
+
+    
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css">
+
+    
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.css">
+
+    
+    
+    
+    
+<link rel="stylesheet" href="/css/back-to-top.css">
+
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="/css/progressbar.css">
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+    
+    <script async="" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+
+
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<!-- <body class="is-2-column"> -->
+<body class="is-3-column">
+    <nav class="navbar navbar-main">
+    <div class="container">
+        <div class="navbar-brand is-flex-center">
+            <a class="navbar-item navbar-logo" href="/">
+            
+                <img src="/images/logo.svg" alt="【Medium 万赞好文】ViewModel 和 LiveData：模式 + 反模式" height="28">
+            
+            </a>
+        </div>
+        <div class="navbar-menu">
+            
+            <div class="navbar-start">
+                
+                <a class="navbar-item"
+                href="/">Home</a>
+                
+                <a class="navbar-item"
+                href="/archives">Archives</a>
+                
+                <a class="navbar-item"
+                href="/categories">Categories</a>
+                
+                <a class="navbar-item"
+                href="/tags">Tags</a>
+                
+                <a class="navbar-item"
+                href="/about">About</a>
+                
+            </div>
+            
+            <div class="navbar-end">
+                
+                    
+                    <a class="navbar-item" target="_blank" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                    
+                
+                
+                <a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;">
+                    <i class="fas fa-list-ul"></i>
+                </a>
+                
+                
+                <a class="navbar-item search" title="搜索" href="javascript:;">
+                    <i class="fas fa-search"></i>
+                </a>
+                
+            </div>
+        </div>
+    </div>
+</nav>
+    
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-8-tablet is-8-desktop is-9-widescreen has-order-2 column-main">
+<div class="card">
+    
+    <div class="card-content article ">
+         <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                【Medium 万赞好文】ViewModel 和 LiveData：模式 + 反模式
+            
+        </h1>
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <!-- <time class="level-item has-text-grey" datetime="2019-10-21T15:32:34.804Z">2019-10-21</time> -->
+                <time class="level-item has-text-grey" datetime="2019-10-21T15:32:34.804Z"><i class="far fa-calendar-alt">&nbsp;</i>2019-10-21</time>
+                <!--  -->
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/译文/">译文</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    22 分钟 读完 (大约 3246 个字)
+                </span>
+                
+                
+                <span class="level-item has-text-grey" id="busuanzi_container_page_pv">
+                    <i class="far fa-eye"></i>
+                    <span id="busuanzi_value_page_pv">0</span> 次访问
+                </span>
+                
+            </div>
+        </div>
+        
+        <!-- <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                【Medium 万赞好文】ViewModel 和 LiveData：模式 + 反模式
+            
+        </h1> -->
+        <div class="content">
+            <blockquote>
+<p>原文作者： <a href="https://medium.com/@JoseAlcerreca" target="_blank" rel="noopener">Jose Alcérreca</a></p>
+<p>原文地址： <a href="https://medium.com/androiddevelopers/viewmodels-and-livedata-patterns-antipatterns-21efaef74a54" target="_blank" rel="noopener">ViewModels and LiveData: Patterns + AntiPatterns</a></p>
+<p>译者：秉心说</p>
+</blockquote>
+<a id="more"></a>
+
+
+<p><img src="https://user-gold-cdn.xitu.io/2019/10/14/16dc9148b2c57daf?w=803&h=230&f=png&s=18933" alt="Typical interaction of entities in an app built with Architecture Components"></p>
+<h2 id="View-和-ViewModel"><a href="#View-和-ViewModel" class="headerlink" title="View 和 ViewModel"></a>View 和 ViewModel</h2><h3 id="分配责任"><a href="#分配责任" class="headerlink" title="分配责任"></a>分配责任</h3><p>理想情况下，ViewModel 应该对 Android 世界一无所知。这提升了可测试性，内存泄漏安全性，并且便于模块化。<br>通常的做法是保证你的 ViewModel 中没有导入任何 <code>android.*</code>，<code>android.arch.*</code> (译者注：现在应该再加一个 <code>androidx.lifecycle</code>)除外。<br>这对 Presenter(MVP) 来说也一样。</p>
+<blockquote>
+<p>❌   不要让 ViewModel  和 Presenter 接触到 Android 框架中的类</p>
+</blockquote>
+<p>条件语句，循环和通用逻辑应该放在应用的 ViewModel 或者其它层来执行，而不是在 Activity 和 Fragment 中。<br>View 通常是不进行单元测试的，除非你使用了 <a href="http://robolectric.org/" target="_blank" rel="noopener">Robolectric</a>，所以其中的代码越少越好。<br>View 只需要知道如何展示数据以及向 ViewModel/Presenter 发送用户事件。这叫做 <a href="https://martinfowler.com/eaaDev/PassiveScreen.html" target="_blank" rel="noopener">Passive View</a> 模式。</p>
+<blockquote>
+<p>✅  让 Activity/Fragment 中的逻辑尽量精简</p>
+</blockquote>
+<h3 id="ViewModel-中的-View-引用"><a href="#ViewModel-中的-View-引用" class="headerlink" title="ViewModel 中的 View 引用"></a>ViewModel 中的 View 引用</h3><p><a href="https://developer.android.com/topic/libraries/architecture/viewmodel.html" target="_blank" rel="noopener">ViewModel</a> 和 Activity/Fragment<br>具有不同的作用域。当 Viewmodel 进入 alive 状态且在运行时，activity 可能位于 <a href="https://developer.android.com/guide/components/activities/activity-lifecycle.html" target="_blank" rel="noopener">生命周期状态</a> 的任何状态。<br>Activitie 和 Fragment 可以在 ViewModel 无感知的情况下被销毁和重新创建。</p>
+<p><img src="https://user-gold-cdn.xitu.io/2019/10/14/16dc93660f91bef2?w=1280&h=960&f=png&s=46798" alt="ViewModels persist configuration changes"></p>
+<p>向 ViewModel 传递 View(Activity/Fragment) 的引用是一个很大的冒险。假设 ViewModel 请求网络，稍后返回数据。<br>若此时 View 的引用已经被销毁，或者已经成为一个不可见的 Activity。这将导致内存泄漏，甚至 crash。</p>
+<blockquote>
+<p>❌  避免在 ViewModel 中持有 View 的引用</p>
+</blockquote>
+<p>在 ViewModel 和 View 中通信的建议方式是观察者模式，使用 LiveData 或者其他类库中的可观察对象。</p>
+<h3 id="观察者模式"><a href="#观察者模式" class="headerlink" title="观察者模式"></a>观察者模式</h3><p><img src="https://user-gold-cdn.xitu.io/2019/10/14/16dc9478fef9f71d?w=412&h=103&f=png&s=7087" alt></p>
+<p>在 Android 中设计表示层的一种非常方便的方法是让 View 观察和订阅 ViewModel（中的变化）。<br>由于 ViewModel 并不知道 Android 的任何东西，所以它也不知道 Android 是如何频繁的杀死 View 的。<br>这有如下好处：</p>
+<ol>
+<li>ViewModel 在配置变化时保持不变，所以当设备旋转时不需要再重新请求资源（数据库或者网络）。</li>
+<li>当耗时任务执行结束，ViewModel 中的可观察数据更新了。这个数据是否被观察并不重要，尝试更新一个<br> 不存在的 View 并不会导致空指针异常。</li>
+<li>ViewModel 不持有 View 的引用，降低了内存泄漏的风险。</li>
+</ol>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">subscribeToModel</span><span class="hljs-params">()</span> </span>&#123;</span><br><span class="line">  <span class="hljs-comment">// Observe product data</span></span><br><span class="line">  viewModel.getObservableProduct().observe(<span class="hljs-keyword">this</span>, <span class="hljs-keyword">new</span> Observer&lt;Product&gt;() &#123;</span><br><span class="line">      <span class="hljs-meta">@Override</span></span><br><span class="line">      <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onChanged</span><span class="hljs-params">(@Nullable Product product)</span> </span>&#123;</span><br><span class="line">        mTitle.setText(product.title);</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>✅  让 UI 观察数据的变化，而不是把数据推送给 UI</p>
+</blockquote>
+<h2 id="胖-ViewModel"><a href="#胖-ViewModel" class="headerlink" title="胖 ViewModel"></a>胖 ViewModel</h2><p>无论是什么让你选择分层，这总是一个好主意。如果你的 ViewModel 拥有大量的代码，承担了过多的责任，那么：</p>
+<ul>
+<li>移除一部分逻辑到和 ViewModel 具有同样作用域的地方。这部分将和应用的其他部分进行通信并更新<pre><code>ViewModel 持有的 LiveData。</code></pre></li>
+<li>采用 <a href="https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html" target="_blank" rel="noopener">Clean Architecture</a>,添加一个 domain 层。这是一个可测试，易维护的架构。<a href="https://github.com/android/architecture-samples" target="_blank" rel="noopener">Architecture Blueprints</a> 中有 Clean Architecture 的示例。</li>
+</ul>
+<blockquote>
+<p>✅  分发责任，如果需要的话，添加 domain 层</p>
+</blockquote>
+<h3 id="使用数据仓库"><a href="#使用数据仓库" class="headerlink" title="使用数据仓库"></a>使用数据仓库</h3><p>如 <a href="https://developer.android.com/jetpack/docs/guide" target="_blank" rel="noopener">应用架构指南</a> 中所说，大部分 App 有多个数据源:</p>
+<ol>
+<li>远程：网络或者云端</li>
+<li>本地：数据库或者文件</li>
+<li>内存缓存</li>
+</ol>
+<p>在你的应用中拥有一个数据层是一个好主意，它和你的视图层完全隔离。保持缓存和数据库与网络同步的算法并不简单。建议使用单独的 Repository 类作为处理这种复杂性的单一入口点.</p>
+<p>如果你有多个不同的数据模型，考虑使用多个 Repository 仓库。</p>
+<blockquote>
+<p>✅ 添加数据仓库作为你的数据的单一入口点。</p>
+</blockquote>
+<h2 id="处理数据状态"><a href="#处理数据状态" class="headerlink" title="处理数据状态"></a>处理数据状态</h2><p>考虑下面这个场景：你正在观察 ViewModel 暴露出来的一个 LiveData，它包含了需要显示的列表项。那么 View 如何区分数据已经加载，网络错误和空集合？</p>
+<ul>
+<li><p>你可以通过 ViewModel 暴露出一个 <code>LiveData&lt;MyDataState&gt;</code>，<code>MyDataState</code> 可以包含数据正在加载，已经加载完成，发生错误等信息。</p>
+</li>
+<li><p>你可以将数据包装在具有状态和其他元数据(如错误消息)的类中。查看示例中的 <a href="https://developer.android.com/jetpack/docs/guide#addendum" target="_blank" rel="noopener">Resource</a> 类。</p>
+</li>
+</ul>
+<blockquote>
+<p>✅ 使用包装类或者另一个 LiveData 来暴露数据的状态信息</p>
+</blockquote>
+<h2 id="保存-activity-状态"><a href="#保存-activity-状态" class="headerlink" title="保存 activity 状态"></a>保存 activity 状态</h2><p>当 activity 被销毁或者进程被杀导致 activity 不可见时，重新创建屏幕所需要的信息被称为 activity 状态。屏幕旋转就是最明显的例子，如果状态保存在 ViewModel 中，它就是安全的。</p>
+<p>但是，你可能需要在 ViewModel 也不存在的情况下恢复状态，例如当操作系统由于资源紧张杀掉你的进程时。</p>
+<p>为了有效的保存和恢复 UI 状态，使用 <code>onSaveInstanceState()</code> 和 ViewModel 组合。</p>
+<p>详见：<a href="https://medium.com/google-developers/viewmodels-persistence-onsaveinstancestate-restoring-ui-state-and-loaders-fc7cc4a6c090" target="_blank" rel="noopener">ViewModels: Persistence, onSaveInstanceState(), Restoring UI<br>State and Loaders</a> 。</p>
+<h2 id="Event"><a href="#Event" class="headerlink" title="Event"></a>Event</h2><p>Event 指只发生一次的事件。ViewModel 暴露出的是数据，那么 Event 呢？例如，导航事件或者展示 Snackbar 消息，都是应该只被执行一次的动作。</p>
+<p>LiveData 保存和恢复数据，和 Event 的概念并不完全符合。看看具有下面字段的一个 ViewModel：</p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LiveData&lt;String&gt; snackbarMessage = <span class="hljs-keyword">new</span> MutableLiveData&lt;&gt;();</span><br></pre></td></tr></table></figure>
+
+<p>Activity 开始观察它，当 ViewModel 结束一个操作时需要更新它的值：</p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">snackbarMessage.setValue(<span class="hljs-string">"Item saved!"</span>);</span><br></pre></td></tr></table></figure>
+
+<p>Activity 接收到了值并且显示了 SnackBar。显然就应该是这样的。</p>
+<p>但是，如果用户旋转了手机，新的 Activity 被创建并且开始观察。当对 LiveData 的观察开始时，新的 Activity 会立即接收到旧的值，导致消息再次被显示。</p>
+<p>与其使用架构组件的库或者扩展来解决这个问题，不如把它当做设计问题来看。<strong>我们建议你把事件当做状态的一部分。</strong></p>
+<blockquote>
+<p>把事件设计成状态的一部分。更多细节请阅读 <a href="https://medium.com/google-developers/livedata-with-snackbar-navigation-and-other-events-the-singleliveevent-case-ac2622673150" target="_blank" rel="noopener">LiveData with SnackBar,Navigation and other events (the SingleLiveEvent case)</a></p>
+</blockquote>
+<h2 id="ViewModel-的泄露"><a href="#ViewModel-的泄露" class="headerlink" title="ViewModel 的泄露"></a>ViewModel 的泄露</h2><p>得益于方便的连接 UI 层和应用的其他层，响应式编程在 Android 中工作的很高效。LiveData 是这个模式的关键组件，你的 Activity 和 Fragment 都会观察 LiveData 实例。</p>
+<p>LiveData 如何与其他组件通信取决于你，要注意内存泄露和边界情况。如下图所示，视图层（Presentation Layer）使用观察者模式，数据层（Data Layer）使用回调。</p>
+<p><img src="https://user-gold-cdn.xitu.io/2019/10/17/16dda3d4a9734d85?w=796&h=237&f=png&s=20874" alt="Observer pattern in the UI and callbacks in the data layer"></p>
+<p>当用户退出应用时，View 不可见了，所以 ViewModel 不需要再被观察。如果数据仓库 Repository 是单例模式并且和应用同作用域，<strong>那么直到应用进程被杀死，数据仓库 Repository 才会被销毁。</strong> 只有当系统资源不足或者用户手动杀掉应用这才会发生。如果数据仓库 Repository 持有 ViewModel 的回调的引用，那么 ViewModel 将会发生内存泄露。</p>
+<p><img src="https://user-gold-cdn.xitu.io/2019/10/17/16dda4831386c5d5?w=809&h=229&f=png&s=19872" alt="The activity is nished but the ViewModel is still around"></p>
+<p>如果 ViewModel 很轻量，或者保证操作很快就会结束，这种泄露也不是什么大问题。但是，事实并不总是这样。理想情况下，只要没有被 View 观察了，ViewModel 就应该被释放。</p>
+<p><img src="https://user-gold-cdn.xitu.io/2019/10/17/16dda4b8473e6423?w=798&h=230&f=png&s=21680" alt></p>
+<p>你可以选择下面几种方式来达成目的：</p>
+<ul>
+<li>通过 <strong>ViewModel.onCLeared()</strong> 通知数据仓库释放 ViewModel 的回调</li>
+<li>在数据仓库 Repository 中使用 <strong>弱引用</strong> ，或者 <strong>Event Bu</strong>（两者都容易被误用，甚至被认为是有害的）。</li>
+<li>通过在 View 和 ViewModel 中使用 LiveData 的方式，在数据仓库和 ViewModel 之间进程通信</li>
+</ul>
+<blockquote>
+<p>✅  考虑边界情况，内存泄露和耗时任务会如何影响架构中的实例。</p>
+<p>❌   不要在 ViewModel 中进行保存状态或者数据相关的核心逻辑。 ViewModel 中的每一次调用都可能是最后一次操作。</p>
+</blockquote>
+<h2 id="数据仓库中的-LiveData"><a href="#数据仓库中的-LiveData" class="headerlink" title="数据仓库中的 LiveData"></a>数据仓库中的 LiveData</h2><p>为了避免 ViewModel 泄露和回调地狱，数据仓库应该被这样观察：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2019/10/17/16dda58e78d0699c?w=890&h=234&f=png&s=24311" alt></p>
+<p>当 ViewModel 被清除，或者 View 的生命周期结束，订阅也会被清除：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2019/10/17/16dda59e14ddb6fd?w=798&h=230&f=png&s=21680" alt></p>
+<p>如果你尝试这种方式的话会遇到一个问题：如果不访问 LifeCycleOwner 对象的话，如果通过 ViewModel 订阅数据仓库？使用 <a href="https://developer.android.com/topic/libraries/architecture/livedata#transform_livedata" target="_blank" rel="noopener">Transformations</a> 可以很方便的解决这个问题。<code>Transformations.switchMap</code> 可以让你根据一个 LiveData 实例的变化创建新的 LiveData。它还允许你通过调用链传递观察者的生命周期信息：</p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">LiveData&lt;Repo&gt; repo = Transformations.switchMap(repoIdLiveData, repoId -&gt; &#123;</span><br><span class="line">        <span class="hljs-keyword">if</span> (repoId.isEmpty()) &#123;</span><br><span class="line">            <span class="hljs-keyword">return</span> AbsentLiveData.create();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="hljs-keyword">return</span> repository.loadRepo(repoId);</span><br><span class="line">    &#125;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p>在这个例子中，当触发更新时，这个函数被调用并且结果被分发到下游。如果一个 Activity 观察了 <code>repo</code>，那么同样的 LifecycleOwner 将被应用在 <code>repository.loadRepo(repoId)</code> 的调用上。</p>
+<blockquote>
+<p>无论什么时候你在 <a href="https://developer.android.com/reference/android/arch/lifecycle/ViewModel.html" target="_blank" rel="noopener">ViewModel</a> 内部需要一个 <a href="https://developer.android.com/reference/android/arch/lifecycle/Lifecycle.html" target="_blank" rel="noopener">LifeCycle</a> 对象时，<a href="https://developer.android.com/topic/libraries/architecture/livedata#transform_livedata" target="_blank" rel="noopener">Transformation</a> 都是一个好方案。</p>
+</blockquote>
+<h2 id="继承-LiveData"><a href="#继承-LiveData" class="headerlink" title="继承 LiveData"></a>继承 LiveData</h2><p>在 ViewModel 中使用 LiveData 最常用的就是 <code>MutableLiveData</code>，并且将其作为 <code>LiveData</code> 暴露给外部，以保证对观察者不可变。</p>
+<p>如果你需要更多功能，继承 LiveData 会让你知道活跃的观察者。这对你监听位置或者传感器服务很有用。</p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyLiveData</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">LiveData</span>&lt;<span class="hljs-title">MyData</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">MyLiveData</span><span class="hljs-params">(Context context)</span> </span>&#123;</span><br><span class="line">        <span class="hljs-comment">// Initialize service</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-meta">@Override</span></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onActive</span><span class="hljs-params">()</span> </span>&#123;</span><br><span class="line">        <span class="hljs-comment">// Start listening</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-meta">@Override</span></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onInactive</span><span class="hljs-params">()</span> </span>&#123;</span><br><span class="line">        <span class="hljs-comment">// Stop listening</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="什么时候不要继承-LiveData"><a href="#什么时候不要继承-LiveData" class="headerlink" title="什么时候不要继承 LiveData"></a>什么时候不要继承 LiveData</h3><p>你也可以通过 <code>onActive()</code> 来开启服务加载数据。但是除非你有一个很好的理由来说明你不需要等待 LiveData 被观察。下面这些通用的设计模式：</p>
+<ul>
+<li>给 <code>ViewModel</code> 添加 <code>start()</code> 方法，并尽快调用它。[见 <a href="https://github.com/android/architecture-samples/blob/dev-todo-mvvm-live/todoapp/app/src/main/java/com/example/android/architecture/blueprints/todoapp/addedittask/AddEditTaskFragment.java#L64" target="_blank" rel="noopener">Blueprints example</a>]</li>
+<li>设置一个触发加载的属性 [见 <a href="https://github.com/googlesamples/android-architecture-components/blob/master/GithubBrowserSample/app/src/main/java/com/android/example/github/ui/repo/RepoFragment.kt" target="_blank" rel="noopener">GithubBrowerExample</a>]</li>
+</ul>
+<blockquote>
+<p>你并不需要经常继承 LiveData 。让 Activity 和 Fragment 告诉 ViewModel 什么时候开始加载数据。</p>
+</blockquote>
+<h2 id="分割线"><a href="#分割线" class="headerlink" title="分割线"></a>分割线</h2><p>翻译就到这里了，其实这篇文章已经在我的收藏夹里躺了很久了。<br>最近 Google 重写了 <a href="https://github.com/android/plaid" target="_blank" rel="noopener">Plaid</a> 应用，用上了一系列最新技术栈， <a href="https://developer.android.com/topic/libraries/architecture/" target="_blank" rel="noopener">AAC</a>，MVVM, Kotlin，协程 等等。这也是我很喜欢的一套技术栈，之前基于此开源了 <a href="https://github.com/lulululbj/wanandroid" target="_blank" rel="noopener">Wanandroid</a> 应用 ，详见 <a href="https://juejin.im/post/5cb473e66fb9a068af37a6ce" target="_blank" rel="noopener">真香！Kotlin+MVVM+LiveData+协程 打造 Wanandroid！</a> 。</p>
+<p>当时基于对 MVVM 的浅薄理解写了一套自认为是 MVVM 的 MVVM 架构，在阅读一些关于架构的文章，以及 Plaid 源码之后，发现了自己的 MVVM 的一些认知误区。后续会对 <a href="https://github.com/lulululbj/wanandroid" target="_blank" rel="noopener">Wanandroid</a> 应用进行合理改造，并结合上面译文中提到的知识点作一定的说明。欢迎 Star ！</p>
+<blockquote>
+<p>文章首发微信公众号： <strong><code>秉心说</code></strong> ， 专注 Java 、 Android 原创知识分享，LeetCode 题解。</p>
+<p>更多最新原创文章，扫码关注我吧！</p>
+</blockquote>
+<p><img src="https://user-gold-cdn.xitu.io/2019/4/27/16a5f352eab602c4?w=2800&h=800&f=jpeg&s=178470" alt></p>
+
+        </div>
+        
+        <hr style="height:1px;margin:1rem 0"/>
+        <div class="level is-size-7 is-uppercase">
+            <div class="level-start">
+                <div class="level-item">
+                    <!-- <span class="is-size-6 has-text-grey has-mr-7">#</span> -->
+                    <i class="fas fa-tags has-text-grey"></i>&nbsp;
+                    <a class="has-link-grey -link" href="/tags/MVVM/">MVVM</a>,&nbsp;<a class="has-link-grey -link" href="/tags/架构/">架构</a>
+                </div>
+            </div>
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+<div class="card">
+    <div class="card-content">
+        <h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3>
+        <div class="buttons is-centered">
+            
+                
+<div class="notification is-danger">
+    You forgot to set the <code>qrcode</code> for Alipay. Please set it in <code>_config.yml</code>.
+</div>
+
+                
+                
+<div class="notification is-danger">
+    You forgot to set the <code>qrcode</code> for Wechat. Please set it in <code>_config.yml</code>.
+</div>
+
+                
+                <!-- Visit https://www.paypal.com/donate/buttons/ to get your donate button -->
+
+<div class="notification is-danger">
+    You forgot to set the <code>business</code> and <code>currency_code</code> for Paypal. Please set it in <code>_config.yml</code>.
+</div>
+
+                
+                
+<div class="notification is-danger">
+    You forgot to set the <code>url</code> Patreon. Please set it in <code>_config.yml</code>.
+</div>
+
+                
+        </div>
+    </div>
+</div>
+
+
+
+<div class="card card-transparent">
+    <div class="level post-navigation is-flex-wrap is-mobile">
+        
+        
+        <div class="level-end">
+            <a class="level level-item has-link-grey  article-nav-next" href="/2019/10/15/zygote_fork/">
+                <span class="level-item">Android 世界中，谁喊醒了 Zygote ？</span>
+                <i class="level-item fas fa-chevron-right"></i>
+            </a>
+        </div>
+        
+    </div>
+</div>
+
+
+</div>
+                
+
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen  has-order-1 column-left ">
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <nav class="level">
+            <div class="level-item has-text-centered" style="flex-shrink: 1">
+                <div>
+                    
+                    <figure class="image is-128x128 has-mb-6">
+                        <img class="" src="/images/avatar.png" alt="路遥">
+                    </figure>
+                    
+                    <p class="is-size-4 is-block">
+                        路遥
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-block">
+                        luyao
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-flex is-flex-center has-text-grey">
+                        <i class="fas fa-map-marker-alt has-mr-7"></i>
+                        <span>China,Shanghai</span>
+                    </p>
+                    
+                </div>
+            </div>
+        </nav>
+        <!-- <nav class="level is-mobile"> -->
+        <nav class="level menu-list is-mobile" style="margin-bottom:1rem">
+            <div class="level-item has-text-centered is-marginless">
+                <a href="/archives/">
+                    <p class="heading">
+                        文章
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        5
+                    </p>
+                </a>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <a href="/categories/">
+                    <p class="heading">
+                        分类
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        3
+                    </p>
+                </a>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <a href="/tags/">
+                    <p class="heading">
+                        标签
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        6
+                    </p>
+                </a>
+            </div>
+        </nav>
+        
+        <div class="level">
+            <a class="level-item button is-link is-rounded" href="https://github.com/lulululbj" target="_blank">
+                    <i class="fab fa-github"></i>&nbsp;&nbsp;关注我</a>
+        </div>
+        
+        
+        
+        <div class="level is-mobile">
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="Github" href="https://github.com/lulululbj">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="Facebook" href="https://facebook.com">
+                
+                <i class="fab fa-facebook"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="Twitter" href="https://twitter.com">
+                
+                <i class="fab fa-twitter"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="Dribbble" href="https://dribbble.com">
+                
+                <i class="fab fa-dribbble"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="RSS" href="/">
+                
+                <i class="fas fa-rss"></i>
+                
+            </a>
+            
+        </div>
+        
+    </div>
+</div>
+    
+        
+<!-- <div class="card widget" id="toc"> -->
+<div class="card widget column-left is-sticky" id="toc">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                目录
+            </h3>
+            <ul class="menu-list"><li>
+        <a class="is-flex" href="#View-和-ViewModel">
+        <span class="has-mr-6">1</span>
+        <span>View 和 ViewModel</span>
+        </a><ul class="menu-list"><li>
+        <a class="is-flex" href="#分配责任">
+        <span class="has-mr-6">1.1</span>
+        <span>分配责任</span>
+        </a></li><li>
+        <a class="is-flex" href="#ViewModel-中的-View-引用">
+        <span class="has-mr-6">1.2</span>
+        <span>ViewModel 中的 View 引用</span>
+        </a></li><li>
+        <a class="is-flex" href="#观察者模式">
+        <span class="has-mr-6">1.3</span>
+        <span>观察者模式</span>
+        </a></li></ul></li><li>
+        <a class="is-flex" href="#胖-ViewModel">
+        <span class="has-mr-6">2</span>
+        <span>胖 ViewModel</span>
+        </a><ul class="menu-list"><li>
+        <a class="is-flex" href="#使用数据仓库">
+        <span class="has-mr-6">2.1</span>
+        <span>使用数据仓库</span>
+        </a></li></ul></li><li>
+        <a class="is-flex" href="#处理数据状态">
+        <span class="has-mr-6">3</span>
+        <span>处理数据状态</span>
+        </a></li><li>
+        <a class="is-flex" href="#保存-activity-状态">
+        <span class="has-mr-6">4</span>
+        <span>保存 activity 状态</span>
+        </a></li><li>
+        <a class="is-flex" href="#Event">
+        <span class="has-mr-6">5</span>
+        <span>Event</span>
+        </a></li><li>
+        <a class="is-flex" href="#ViewModel-的泄露">
+        <span class="has-mr-6">6</span>
+        <span>ViewModel 的泄露</span>
+        </a></li><li>
+        <a class="is-flex" href="#数据仓库中的-LiveData">
+        <span class="has-mr-6">7</span>
+        <span>数据仓库中的 LiveData</span>
+        </a></li><li>
+        <a class="is-flex" href="#继承-LiveData">
+        <span class="has-mr-6">8</span>
+        <span>继承 LiveData</span>
+        </a><ul class="menu-list"><li>
+        <a class="is-flex" href="#什么时候不要继承-LiveData">
+        <span class="has-mr-6">8.1</span>
+        <span>什么时候不要继承 LiveData</span>
+        </a></li></ul></li><li>
+        <a class="is-flex" href="#分割线">
+        <span class="has-mr-6">9</span>
+        <span>分割线</span>
+        </a></li></ul>
+        </div>
+    </div>
+</div>
+    
+    
+        <div class="column-right-shadow is-hidden-widescreen ">
+        
+        </div>
+    
+</div>
+
+                
+            </div>
+        </div>
+    </section>
+    <footer class="footer">
+    <div class="container">
+        <div class="level">
+            <div class="level-start has-text-centered-mobile">
+                <a class="footer-logo is-block has-mb-6" href="/">
+                
+                    <img src="/images/logo.svg" alt="【Medium 万赞好文】ViewModel 和 LiveData：模式 + 反模式" height="28">
+                
+                </a>
+                <p class="is-size-7">
+                &copy; 2019 路遥&nbsp;
+                Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> & <a
+                        href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank">Icarus</a>
+                
+                <br>
+				<span id="busuanzi_container_site_pv">
+                <span id="busuanzi_value_site_pv">0</span> 次访问
+                </span>
+                <span id="busuanzi_container_site_uv">
+                共 <span id="busuanzi_value_site_uv">0</span> 个访客
+                </span>
+                
+                </p>
+            </div>
+            <div class="level-end">
+            
+                <div class="field has-addons is-flex-center-mobile has-mt-5-mobile is-flex-wrap is-flex-middle">
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Creative Commons" href="https://creativecommons.org/">
+                        
+                        <i class="fab fa-creative-commons"></i>
+                        
+                    </a>
+                </p>
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/">
+                        
+                        <i class="fab fa-creative-commons-by"></i>
+                        
+                    </a>
+                </p>
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                </p>
+                
+                </div>
+            
+            </div>
+        </div>
+    </div>
+</footer>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script>
+<script>moment.locale("zh-CN");</script>
+
+<script>
+var IcarusThemeSettings = {
+    article: {
+        highlight: {
+            clipboard: true,
+            fold: 'unfolded'
+        }
+    }
+};
+</script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script>
+
+
+
+    
+    
+<script src="/js/animation.js"></script>
+
+    
+    
+<script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script>
+<script src="/js/gallery.js" defer></script>
+
+    
+    
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update
+            my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.js" defer></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        });
+    });
+</script>
+
+    
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    MathJax.Hub.Config({
+        'HTML-CSS': {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+});
+</script>
+    
+    
+<a id="back-to-top" title="回到顶端" href="javascript:;">
+    <i class="fas fa-chevron-up"></i>
+</a>
+<script src="/js/back-to-top.js" defer></script>
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+
+<script src="/js/main.js" defer></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="想要查找什么..." />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(无标题)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/js/insight.js" defer></script>
+<link rel="stylesheet" href="/css/search.css">
+<link rel="stylesheet" href="/css/insight.css">
+    
+</body>
+</html>
