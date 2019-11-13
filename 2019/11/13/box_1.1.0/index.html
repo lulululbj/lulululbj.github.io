@@ -7,22 +7,22 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 
-<title>Box 1.1.0 ! 支持手机端反编译 ！ - 路遥的博客</title>
+<title>Box 黑科技 —— 支持手机端反编译 ！ - 路遥的博客</title>
 
 
-    <meta name="description" content="有将近一个月没有更新文章了，一方面在啃 AOSP ，消化起来确实比较慢。在阅读的过程中，有时候上来就会陷入源码细节，其实这是没有必要的。刚开始更多的应该从整体脉络上去理解，摸清整个流程之后再去有针对性的看某些细节，才会事半功倍。下一篇应该会带来 Activity 启动流程分析 。">
+    <meta name="description" content="项目地址： Box 文末扫码获取最新安装包 。  前言有将近一个月没有更新文章了，一方面在啃 AOSP ，消化起来确实比较慢。在阅读的过程中，有时候上来就会陷入源码细节，其实这是没有必要的。刚开始更多的应该从整体脉络上去理解，摸清整个流程之后再去有针对性的看某些细节，才会事半功倍。下一篇应该会带来 Activity 启动流程分析 。">
 <meta name="keywords" content="反编译">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Box 1.1.0 ! 支持手机端反编译 ！">
-<meta property="og:url" content="http://sunluyao.com/2019/11/12/box_1.1.0/index.html">
+<meta property="og:title" content="Box 黑科技 —— 支持手机端反编译 ！">
+<meta property="og:url" content="http://sunluyao.com/2019/11/13/box_1.1.0/index.html">
 <meta property="og:site_name" content="路遥的博客">
-<meta property="og:description" content="有将近一个月没有更新文章了，一方面在啃 AOSP ，消化起来确实比较慢。在阅读的过程中，有时候上来就会陷入源码细节，其实这是没有必要的。刚开始更多的应该从整体脉络上去理解，摸清整个流程之后再去有针对性的看某些细节，才会事半功倍。下一篇应该会带来 Activity 启动流程分析 。">
+<meta property="og:description" content="项目地址： Box 文末扫码获取最新安装包 。  前言有将近一个月没有更新文章了，一方面在啃 AOSP ，消化起来确实比较慢。在阅读的过程中，有时候上来就会陷入源码细节，其实这是没有必要的。刚开始更多的应该从整体脉络上去理解，摸清整个流程之后再去有针对性的看某些细节，才会事半功倍。下一篇应该会带来 Activity 启动流程分析 。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://sunluyao.com/images/og_image.png">
-<meta property="og:updated_time" content="2019-11-12T15:58:01.209Z">
+<meta property="og:updated_time" content="2019-11-13T15:32:41.162Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Box 1.1.0 ! 支持手机端反编译 ！">
-<meta name="twitter:description" content="有将近一个月没有更新文章了，一方面在啃 AOSP ，消化起来确实比较慢。在阅读的过程中，有时候上来就会陷入源码细节，其实这是没有必要的。刚开始更多的应该从整体脉络上去理解，摸清整个流程之后再去有针对性的看某些细节，才会事半功倍。下一篇应该会带来 Activity 启动流程分析 。">
+<meta name="twitter:title" content="Box 黑科技 —— 支持手机端反编译 ！">
+<meta name="twitter:description" content="项目地址： Box 文末扫码获取最新安装包 。  前言有将近一个月没有更新文章了，一方面在啃 AOSP ，消化起来确实比较慢。在阅读的过程中，有时候上来就会陷入源码细节，其实这是没有必要的。刚开始更多的应该从整体脉络上去理解，摸清整个流程之后再去有针对性的看某些细节，才会事半功倍。下一篇应该会带来 Activity 启动流程分析 。">
 <meta name="twitter:image" content="http://sunluyao.com/images/og_image.png">
 
 
@@ -82,7 +82,7 @@
         <div class="navbar-brand is-flex-center">
             <a class="navbar-item navbar-logo" href="/">
             
-                <img src="/images/logo.svg" alt="Box 1.1.0 ! 支持手机端反编译 ！" height="28">
+                <img src="/images/logo.svg" alt="Box 黑科技 —— 支持手机端反编译 ！" height="28">
             
             </a>
         </div>
@@ -141,14 +141,14 @@
     <div class="card-content article ">
          <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
             
-                Box 1.1.0 ! 支持手机端反编译 ！
+                Box 黑科技 —— 支持手机端反编译 ！
             
         </h1>
         
         <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
             <div class="level-left">
-                <!-- <time class="level-item has-text-grey" datetime="2019-11-12T15:58:01.209Z">2019-11-12</time> -->
-                <time class="level-item has-text-grey" datetime="2019-11-12T15:58:01.209Z"><i class="far fa-calendar-alt">&nbsp;</i>2019-11-12</time>
+                <!-- <time class="level-item has-text-grey" datetime="2019-11-13T15:32:41.162Z">2019-11-13</time> -->
+                <time class="level-item has-text-grey" datetime="2019-11-13T15:32:41.162Z"><i class="far fa-calendar-alt">&nbsp;</i>2019-11-13</time>
                 <!--  -->
                 
                 <div class="level-item">
@@ -159,7 +159,7 @@
                 <span class="level-item has-text-grey">
                     
                     
-                    5 分钟 读完 (大约 703 个字)
+                    7 分钟 读完 (大约 1122 个字)
                 </span>
                 
                 
@@ -173,16 +173,32 @@
         
         <!-- <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
             
-                Box 1.1.0 ! 支持手机端反编译 ！
+                Box 黑科技 —— 支持手机端反编译 ！
             
         </h1> -->
         <div class="content">
-            <p>有将近一个月没有更新文章了，一方面在啃 AOSP ，消化起来确实比较慢。在阅读的过程中，有时候上来就会陷入源码细节，其实这是没有必要的。刚开始更多的应该从整体脉络上去理解，摸清整个流程之后再去有针对性的看某些细节，才会事半功倍。下一篇应该会带来 <strong>Activity 启动流程分析</strong> 。</p>
+            <blockquote>
+<p> 项目地址： <a href="https://github.com/lulululbj/Box" target="_blank" rel="noopener">Box</a></p>
+<p>文末扫码获取最新安装包 。</p>
+</blockquote>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>有将近一个月没有更新文章了，一方面在啃 AOSP ，消化起来确实比较慢。在阅读的过程中，有时候上来就会陷入源码细节，其实这是没有必要的。刚开始更多的应该从整体脉络上去理解，摸清整个流程之后再去有针对性的看某些细节，才会事半功倍。下一篇应该会带来 <strong>Activity 启动流程分析</strong> 。</p>
 <a id="more"></a>
 
-<p>除了啃 AOSP 之外，剩下的时间都花在了开源项目的维护和更新上。一个是 <a href="https://github.com/lulululbj/wanandroid" target="_blank" rel="noopener">wanandroid</a> 应用，主要技术栈是 <code>Kotlin 、 MMVM 、 协程</code> ，开源了一段时间，一度觉得自己的 MVVM 写的还不错。在阅读相关架构文章以及 Google 重构了 <a href="https://github.com/android/plaid" target="_blank" rel="noopener">plaid</a> 之后，发现了自己的框架在 <strong>分离关注点</strong> 方面存在的一些问题。主要针对架构方面做了一些调整，目前来看还是比较符合 MVVM 的思想的。另外，也新增了网页版的新功能 “广场”。最后说一说后续的更新计划，第一点，Jetpack 的深入使用。包括 Navigation 单 Activity 实现，Room ，Page 等类库的使用。第二点，完成一个 <strong>Jetpack Compse</strong> 版本，虽然 Compose 还是预览版，但我坚定看好 Compose，实在忍不住不去尝试一下，其实也已经在开发中了，完成了一些简单页面，有在学习 Compose 的朋友可以交流交流，项目地址在这里 -》 <a href="https://github.com/lulululbj/Wanandroid-Compose" target="_blank" rel="noopener">Wanandroid-Compose</a> 。</p>
-<p>另一个开源项目就是今天要说的 <a href="https://github.com/lulululbj/Box" target="_blank" rel="noopener">Box</a> 了，说来惭愧，已经好几个月没有更新了。这次带来的新功能是 <strong>手机端反编译</strong> 。熟悉反编译的同学应该对这个功能很熟悉，但都是在 PC 上操作的，<code>Apktool</code> ，<code>Jadx</code> 等开源工具都提供了 PC 端的命令行操作或者图形界面。其实第一次看到手机端反编译功能是在 Trinea 的 <a href="https://www.trinea.cn/android/android-dev-tools-5-6-0/" target="_blank" rel="noopener">Android 开发助手</a> 上，当时感觉挺惊艳的，也比较好奇是如何实现的。</p>
-<p>其实很简单，Apktool 和 Jadx 都是开源的，移植到 Android 上就可以了。大致浏览了一下 Jadx 源码，就开始了移植工作。鉴于 Jadx 源码的优秀设计，整个移植过程也没有费太大功夫。结合 Jadx 源码和 Android 开发助手的 UI 设计，不难看出 Trinea 也是移植了 Jadx 源码。</p>
+<p>除了啃 AOSP 之外，剩下的时间都花在了开源项目的维护和更新上。一个是 <a href="https://github.com/lulululbj/wanandroid" target="_blank" rel="noopener">Wanandroid</a> 应用，主要技术栈是 <code>Kotlin 、 MMVM 、 协程</code> ，开源了一段时间，一度觉得自己的 MVVM 写的还不错。在阅读相关架构文章以及 Google 重构了 <a href="https://github.com/android/plaid" target="_blank" rel="noopener">plaid</a> 之后，发现了自己的框架在 <strong>分离关注点</strong> 方面存在的一些问题。主要针对架构方面做了一些调整，目前来看还是比较符合 MVVM 的思想的。另外，也新增了网页版的新功能 “广场”。</p>
+<p>说一说 Wanandroid 后续的更新计划，第一点，Jetpack 的深anzhuangb入使用。包括 Navigation 单 Activity 实现，Room ，Page 等类库的使用。第二点，完成一个 <strong>Jetpack Compse</strong> 版本，虽然 Compose 还是预览版，但我坚定看好 Compose，实在忍不住不去尝试一下，其实也已经在开发中了，完成了一些简单页面，有在学习 Compose 的朋友可以交流交流，项目地址在这里 -》 <a href="https://github.com/lulululbj/Wanandroid-Compose" target="_blank" rel="noopener">Wanandroid-Compose</a> 。</p>
+<h2 id="Box-V0-2-0"><a href="#Box-V0-2-0" class="headerlink" title="Box V0.2.0"></a>Box V0.2.0</h2><p>另一个开源项目就是今天要说的 <a href="https://github.com/lulululbj/Box" target="_blank" rel="noopener">Box</a> 了，说来惭愧，已经好几个月没有更新了。这次带来了一个 “黑科技”，对，没错，就是堪比 <strong>小米手机八项黑科技</strong> 的 <strong>手机端反编译</strong>  功能。熟悉反编译的同学应该对这个功能很熟悉，但都是在 PC 上操作的，<code>Apktool</code> ，<code>Jadx</code> 等开源工具都提供了 PC 端的命令行操作或者图形界面。其实第一次看到手机端反编译功能是在 Trinea 的 <a href="https://www.trinea.cn/android/android-dev-tools-5-6-0/" target="_blank" rel="noopener">Android 开发助手</a> 上，当时感觉挺惊艳的，也比较好奇是如何实现的。anzhuangb</p>
+<p>其实很简单，Apktool 和 Jadx 都是开源的，移植到 Android 上就可以了。大致浏览了一下 Jadx 源码，就开始了移植工作。鉴于 Jadx 源码的优秀设计，整个移植过程也没有费太大功夫。结合  Android 开发助手的 UI 设计，不难看出 Trinea 也是移植了 Jadx 源码。<br>box_app_managerbox_app_manager<br>下面的 gif 简单展示了反编译功能的使用：</p>
+<p><img src="/source/images/20191113/box_reverse.gif" alt>box_app_manager</p>
+<p>除此之外，针对之前的 <strong>当前 Activity</strong> 功能做了一些完善，主要替换了悬浮窗的依赖库，现在使用的是 <a href="https://github.com/princekin-f/EasyFloat" target="_blank" rel="noopener">EasyFloat</a>。这是一个 Kotlin 版本，且更加稳定。下面也用一个 gif  演示一下该功能：</p>
+<p><img src="/source/images/20191113/box_current_activity.gif" alt></p>
+<p>另外，在更新 <a href="https://github.com/lulululbj/AndroidUtilCodeKTX" target="_blank" rel="noopener">AndroidUtilCodeKTX</a> 的文件工具类部分时，为了能总结的尽量完整，就在 Box 里面增加了 <strong>文件管理</strong> 功能，界面相对简陋，但功能还算完整，后续会继续完善，大家可以提提 issue 。</p>
+<p>针对 <strong>应用管理</strong> 功能，新增了对本地安装包文件的支持。无需安装也能直接查看各种应用信息。关于其中一个查看 <code>AndroidManifest.xml</code> 文件的功能，建议阅读 <a href="https://juejin.im/post/5c2253f6f265da616d54377b" target="_blank" rel="noopener">Android逆向笔记 —— AndroidManifest.xml 文件格式解析</a> 。</p>
+<p><img src="/source/images/20191113/box_app_manager.gif" alt></p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>如果你有新奇的想法和功能，欢迎前来交流。</p>
+<p>添加我的微信，加入技术交流群。</p>
+<p><img src="https://user-gold-cdn.xitu.io/2019/11/13/16e6562c457b5e6e?w=674&h=896&f=jpeg&s=62183" alt></p>
+<p>公众号后台回复 “Box”， 获取最新安装包。</p>
+<p><img src="https://user-gold-cdn.xitu.io/2019/11/13/16e656421741bfbc?w=2800&h=800&f=jpeg&s=178470" alt></p>
 
         </div>
         
@@ -383,7 +399,19 @@
             <h3 class="menu-label">
                 目录
             </h3>
-            
+            <ul class="menu-list"><li>
+        <a class="is-flex" href="#前言">
+        <span class="has-mr-6">1</span>
+        <span>前言</span>
+        </a></li><li>
+        <a class="is-flex" href="#Box-V0-2-0">
+        <span class="has-mr-6">2</span>
+        <span>Box V0.2.0</span>
+        </a></li><li>
+        <a class="is-flex" href="#最后">
+        <span class="has-mr-6">3</span>
+        <span>最后</span>
+        </a></li></ul>
         </div>
     </div>
 </div>
@@ -405,7 +433,7 @@
             <div class="level-start has-text-centered-mobile">
                 <a class="footer-logo is-block has-mb-6" href="/">
                 
-                    <img src="/images/logo.svg" alt="Box 1.1.0 ! 支持手机端反编译 ！" height="28">
+                    <img src="/images/logo.svg" alt="Box 黑科技 —— 支持手机端反编译 ！" height="28">
                 
                 </a>
                 <p class="is-size-7">
