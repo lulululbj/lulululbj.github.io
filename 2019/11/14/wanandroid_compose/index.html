@@ -7,22 +7,22 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 
-<title>Box 黑科技 —— 支持手机端反编译 ！ - 路遥的博客</title>
+<title>Jetpack Compse 尝鲜 —— 完全不一样的开发体验 - 路遥的博客</title>
 
 
-    <meta name="description" content="项目地址： Box 文末扫码获取最新安装包 。  前言有将近一个月没有更新文章了，一方面在啃 AOSP ，消化起来确实比较慢。在阅读的过程中，有时候上来就会陷入源码细节，其实这是没有必要的。刚开始更多的应该从整体脉络上去理解，摸清整个流程之后再去有针对性的看某些细节，才会事半功倍。下一篇应该会带来 Activity 启动流程分析 。">
-<meta name="keywords" content="反编译">
+    <meta name="description" content="经过前段时间的 Android Dev Summit ，相信你已经大概了解了 Jetpack Compose 。如果你还没有听说过，可以阅读这篇文章 Jetpack Compose 最新进展 。总而言之，Compose 是一个 颠覆性 的 声明式 UI 框架 ，它的口号就是 消灭 xml 文件 ！ 尽管 Jetpack Compose 还只是预览版，API 可能发生变化，缺乏足够的控件支持，甚至不">
+<meta name="keywords" content="Jetpack,Compose">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Box 黑科技 —— 支持手机端反编译 ！">
-<meta property="og:url" content="http://sunluyao.com/2019/11/13/box_1.1.0/index.html">
+<meta property="og:title" content="Jetpack Compse 尝鲜 —— 完全不一样的开发体验">
+<meta property="og:url" content="http://sunluyao.com/2019/11/14/wanandroid_compose/index.html">
 <meta property="og:site_name" content="路遥的博客">
-<meta property="og:description" content="项目地址： Box 文末扫码获取最新安装包 。  前言有将近一个月没有更新文章了，一方面在啃 AOSP ，消化起来确实比较慢。在阅读的过程中，有时候上来就会陷入源码细节，其实这是没有必要的。刚开始更多的应该从整体脉络上去理解，摸清整个流程之后再去有针对性的看某些细节，才会事半功倍。下一篇应该会带来 Activity 启动流程分析 。">
+<meta property="og:description" content="经过前段时间的 Android Dev Summit ，相信你已经大概了解了 Jetpack Compose 。如果你还没有听说过，可以阅读这篇文章 Jetpack Compose 最新进展 。总而言之，Compose 是一个 颠覆性 的 声明式 UI 框架 ，它的口号就是 消灭 xml 文件 ！ 尽管 Jetpack Compose 还只是预览版，API 可能发生变化，缺乏足够的控件支持，甚至不">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://sunluyao.com/images/og_image.png">
-<meta property="og:updated_time" content="2019-11-13T15:32:41.162Z">
+<meta property="og:updated_time" content="2019-11-14T15:58:18.550Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Box 黑科技 —— 支持手机端反编译 ！">
-<meta name="twitter:description" content="项目地址： Box 文末扫码获取最新安装包 。  前言有将近一个月没有更新文章了，一方面在啃 AOSP ，消化起来确实比较慢。在阅读的过程中，有时候上来就会陷入源码细节，其实这是没有必要的。刚开始更多的应该从整体脉络上去理解，摸清整个流程之后再去有针对性的看某些细节，才会事半功倍。下一篇应该会带来 Activity 启动流程分析 。">
+<meta name="twitter:title" content="Jetpack Compse 尝鲜 —— 完全不一样的开发体验">
+<meta name="twitter:description" content="经过前段时间的 Android Dev Summit ，相信你已经大概了解了 Jetpack Compose 。如果你还没有听说过，可以阅读这篇文章 Jetpack Compose 最新进展 。总而言之，Compose 是一个 颠覆性 的 声明式 UI 框架 ，它的口号就是 消灭 xml 文件 ！ 尽管 Jetpack Compose 还只是预览版，API 可能发生变化，缺乏足够的控件支持，甚至不">
 <meta name="twitter:image" content="http://sunluyao.com/images/og_image.png">
 
 
@@ -82,7 +82,7 @@
         <div class="navbar-brand is-flex-center">
             <a class="navbar-item navbar-logo" href="/">
             
-                <img src="/images/logo.svg" alt="Box 黑科技 —— 支持手机端反编译 ！" height="28">
+                <img src="/images/logo.svg" alt="Jetpack Compse 尝鲜 —— 完全不一样的开发体验" height="28">
             
             </a>
         </div>
@@ -141,25 +141,25 @@
     <div class="card-content article ">
          <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
             
-                Box 黑科技 —— 支持手机端反编译 ！
+                Jetpack Compse 尝鲜 —— 完全不一样的开发体验
             
         </h1>
         
         <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
             <div class="level-left">
-                <!-- <time class="level-item has-text-grey" datetime="2019-11-13T15:32:41.162Z">2019-11-13</time> -->
-                <time class="level-item has-text-grey" datetime="2019-11-13T15:32:41.162Z"><i class="far fa-calendar-alt">&nbsp;</i>2019-11-13</time>
+                <!-- <time class="level-item has-text-grey" datetime="2019-11-14T15:58:18.550Z">2019-11-14</time> -->
+                <time class="level-item has-text-grey" datetime="2019-11-14T15:58:18.550Z"><i class="far fa-calendar-alt">&nbsp;</i>2019-11-14</time>
                 <!--  -->
                 
                 <div class="level-item">
-                <a class="has-link-grey -link" href="/categories/开源项目/">开源项目</a>&nbsp;/&nbsp;<a class="has-link-grey -link" href="/categories/开源项目/Box/">Box</a>
+                <a class="has-link-grey -link" href="/categories/Android/">Android</a>&nbsp;/&nbsp;<a class="has-link-grey -link" href="/categories/Android/Jetpack/">Jetpack</a>
                 </div>
                 
                 
                 <span class="level-item has-text-grey">
                     
                     
-                    7 分钟 读完 (大约 1122 个字)
+                    9 分钟 读完 (大约 1283 个字)
                 </span>
                 
                 
@@ -173,32 +173,30 @@
         
         <!-- <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
             
-                Box 黑科技 —— 支持手机端反编译 ！
+                Jetpack Compse 尝鲜 —— 完全不一样的开发体验
             
         </h1> -->
         <div class="content">
-            <blockquote>
-<p> 项目地址： <a href="https://github.com/lulululbj/Box" target="_blank" rel="noopener">Box</a></p>
-<p>文末扫码获取最新安装包 。</p>
+            <p>经过前段时间的 Android Dev Summit ，相信你已经大概了解了 Jetpack Compose 。如果你还没有听说过，可以阅读这篇文章 <a href="https://juejin.im/post/5db7933ae51d4529f07977e4" target="_blank" rel="noopener">Jetpack Compose 最新进展</a> 。总而言之，Compose 是一个 <strong>颠覆性</strong> 的 <strong>声明式 UI 框架</strong> ，它的口号就是 <strong>消灭 xml 文件 ！</strong></p>
+<p>尽管 Jetpack Compose 还只是预览版，API 可能发生变化，缺乏足够的控件支持，甚至不是那么稳定，但这阻止不了我这颗好奇的心。我在第一时间就上手撸了一款 Compose 版本 Wanandroid 应用，功能也比较简单，仅仅包括首页，广告和最新项目，类似于 Android 原生页面的 <code>Viewpager + TabLayout</code> 。下面的 gif 展示了应用的基本页面：</p>
+<p><img src alt></p>
+<blockquote>
+<p>项目地址： <a href="https://github.com/lulululbj/Wanandroid-Compose" target="_blank" rel="noopener">Wanandroid-Compose</a></p>
 </blockquote>
-<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>有将近一个月没有更新文章了，一方面在啃 AOSP ，消化起来确实比较慢。在阅读的过程中，有时候上来就会陷入源码细节，其实这是没有必要的。刚开始更多的应该从整体脉络上去理解，摸清整个流程之后再去有针对性的看某些细节，才会事半功倍。下一篇应该会带来 <strong>Activity 启动流程分析</strong> 。</p>
-<a id="more"></a>
-
-<p>除了啃 AOSP 之外，剩下的时间都花在了开源项目的维护和更新上。一个是 <a href="https://github.com/lulululbj/wanandroid" target="_blank" rel="noopener">Wanandroid</a> 应用，主要技术栈是 <code>Kotlin 、 MMVM 、 协程</code> ，开源了一段时间，一度觉得自己的 MVVM 写的还不错。在阅读相关架构文章以及 Google 重构了 <a href="https://github.com/android/plaid" target="_blank" rel="noopener">plaid</a> 之后，发现了自己的框架在 <strong>分离关注点</strong> 方面存在的一些问题。主要针对架构方面做了一些调整，目前来看还是比较符合 MVVM 的思想的。另外，也新增了网页版的新功能 “广场”。</p>
-<p>说一说 Wanandroid 后续的更新计划，第一点，Jetpack 的深anzhuangb入使用。包括 Navigation 单 Activity 实现，Room ，Page 等类库的使用。第二点，完成一个 <strong>Jetpack Compse</strong> 版本，虽然 Compose 还是预览版，但我坚定看好 Compose，实在忍不住不去尝试一下，其实也已经在开发中了，完成了一些简单页面，有在学习 Compose 的朋友可以交流交流，项目地址在这里 -》 <a href="https://github.com/lulululbj/Wanandroid-Compose" target="_blank" rel="noopener">Wanandroid-Compose</a> 。</p>
-<h2 id="Box-V0-2-0"><a href="#Box-V0-2-0" class="headerlink" title="Box V0.2.0"></a>Box V0.2.0</h2><p>另一个开源项目就是今天要说的 <a href="https://github.com/lulululbj/Box" target="_blank" rel="noopener">Box</a> 了，说来惭愧，已经好几个月没有更新了。这次带来了一个 “黑科技”，对，没错，就是堪比 <strong>小米手机八项黑科技</strong> 的 <strong>手机端反编译</strong>  功能。熟悉反编译的同学应该对这个功能很熟悉，但都是在 PC 上操作的，<code>Apktool</code> ，<code>Jadx</code> 等开源工具都提供了 PC 端的命令行操作或者图形界面。其实第一次看到手机端反编译功能是在 Trinea 的 <a href="https://www.trinea.cn/android/android-dev-tools-5-6-0/" target="_blank" rel="noopener">Android 开发助手</a> 上，当时感觉挺惊艳的，也比较好奇是如何实现的。anzhuangb</p>
-<p>其实很简单，Apktool 和 Jadx 都是开源的，移植到 Android 上就可以了。大致浏览了一下 Jadx 源码，就开始了移植工作。鉴于 Jadx 源码的优秀设计，整个移植过程也没有费太大功夫。结合  Android 开发助手的 UI 设计，不难看出 Trinea 也是移植了 Jadx 源码。<br>box_app_managerbox_app_manager<br>下面的 gif 简单展示了反编译功能的使用：</p>
-<p><img src="/source/images/20191113/box_reverse.gif" alt>box_app_manager</p>
-<p>除此之外，针对之前的 <strong>当前 Activity</strong> 功能做了一些完善，主要替换了悬浮窗的依赖库，现在使用的是 <a href="https://github.com/princekin-f/EasyFloat" target="_blank" rel="noopener">EasyFloat</a>。这是一个 Kotlin 版本，且更加稳定。下面也用一个 gif  演示一下该功能：</p>
-<p><img src="/source/images/20191113/box_current_activity.gif" alt></p>
-<p>另外，在更新 <a href="https://github.com/lulululbj/AndroidUtilCodeKTX" target="_blank" rel="noopener">AndroidUtilCodeKTX</a> 的文件工具类部分时，为了能总结的尽量完整，就在 Box 里面增加了 <strong>文件管理</strong> 功能，界面相对简陋，但功能还算完整，后续会继续完善，大家可以提提 issue 。</p>
-<p>针对 <strong>应用管理</strong> 功能，新增了对本地安装包文件的支持。无需安装也能直接查看各种应用信息。关于其中一个查看 <code>AndroidManifest.xml</code> 文件的功能，建议阅读 <a href="https://juejin.im/post/5c2253f6f265da616d54377b" target="_blank" rel="noopener">Android逆向笔记 —— AndroidManifest.xml 文件格式解析</a> 。</p>
-<p><img src="/source/images/20191113/box_app_manager.gif" alt></p>
-<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>如果你有新奇的想法和功能，欢迎前来交流。</p>
-<p>添加我的微信，加入技术交流群。</p>
-<p><img src="https://user-gold-cdn.xitu.io/2019/11/13/16e6562c457b5e6e?w=674&h=896&f=jpeg&s=62183" alt></p>
-<p>公众号后台回复 “Box”， 获取最新安装包。</p>
-<p><img src="https://user-gold-cdn.xitu.io/2019/11/13/16e656421741bfbc?w=2800&h=800&f=jpeg&s=178470" alt></p>
+<p>可以看出来页面并不是那么流畅，View 的复用应该是个问题，甚至我也没发现应该怎么做下拉刷新。那么，Compose 给我们带来了什么呢？在解答这个问题之前，我想先来说说 Android 应用架构问题。</p>
+<h2 id="荒芜年代-——-MVC"><a href="#荒芜年代-——-MVC" class="headerlink" title="荒芜年代  —— MVC"></a>荒芜年代  —— MVC</h2><p>在我刚入行的时候，可以说是 Android 开发的黄金时代，也可以说是开发者的荒芜时代。一方面，毫不夸张的说，基本会写 xml 都能谋得一份工作。另一方面，对于开发者来说，远远没有现在的规范的开发架构。没记错的话，我当年的主力开发框架是 <code>xUtils 2</code> ，一个类库大包干，从 布局和 ID 绑定，网络请求，到图片展示，ORM 操作，一应俱全。当时的 布局和 ID 绑定还是运行时反射，而不是编译期注解。很长一段时间以来，Android 连一个官方的网络库都没有。</p>
+<p>在架构方面，大部分人都是一个 Activity 撸到死，我真的见过上千行的 MainActivity 。并且很多人觉得这就是 MVC 架构，也包括我，实体类 Entity 就是 <code>Model</code> 层，<code>Activity/Fragment</code> 就是 <code>Controller</code> 层，布局文件就是 <code>View</code> 层。</p>
+<p>但这当真是 <code>MVC</code> 吗？我觉得不是。不管是 <code>MVC</code>， <code>MVP</code>，还是 <code>MVVM</code>，都应该遵循同一个原则，<strong>表现层和业务层分离</strong> ，也就是 Android 官网给出的 <a href="https://developer.android.google.cn/jetpack/docs/guide" target="_blank" rel="noopener">应用架构指南</a> 中强调的 <strong>分离关注点</strong> 。<code>Activity/Fragment</code> 既要承担视图层的任务，展示和更新 UI，又要处理业务层逻辑，获取数据等。这并不符合架构设计的基本原则。</p>
+<p>正确的 MVC 模式中，Model 层不仅包含实体类 Entity，更重要的作用是处理业务逻辑。View 层负责处理视图逻辑。而 Controller 就是 Model 和 View 之前的桥梁。桥怎么建，其实并没有标准，根据你自己的需求就可以了。</p>
+<p><img src="/source/images/wanandroid_compose/mvc.png" alt></p>
+<p>引用一张阮一峰来时的图，大致是这么个意思，但是也不一定就完全都是单向依赖。</p>
+<p>作为一个架构，MVC 总算有点分层的味道在里面了，分离了视图层和业务层。但是 View 层和 Model 层的依赖关系，终将导致 View 层，即 Activity 日益臃肿。那么有没有办法将 View 层和 Model 层彻底分离，做到视图层和模型层完全分离呢？ <strong>MVP</strong> 就应运而生了。</p>
+<h2 id="青铜年代-——-MVP"><a href="#青铜年代-——-MVP" class="headerlink" title="青铜年代 —— MVP"></a>青铜年代 —— MVP</h2><p>依旧是阮一峰老师的图片：</p>
+<p><img src="/source/images/wanandroid_compose/mvp.png" alt></p>
+<p>相较于 MVC ，用 <code>Presenter 层</code> 代替了 <code>Controller 层</code> ，且 <code>View 层</code> 和 <code>Model 层</code> 完全分离，依靠 Presenter 进行通信 。</p>
+<p>想象一个获取用户信息的场景。<code>IView</code> 接口中定义了一系列视图层接口 ，View 层（Activity）实现 <code>IView</code> 接口并实现相应视图逻辑。同时 View 层是通过持有的 Presenter 处理业务逻辑的即请求用户信息。一般情况下，Presenter 也不直接处理业务逻辑，而是通过 Model 层，例如数据仓库 Repository， 来获取数据，避免 Presenter 重蹈覆辙，日渐臃肿。同时，Presenter 层也是持有 VIew 的，获取用户信息之后再转发给 VIew 。</p>
+<p>总结一下，MVP 中 View 和 Presenter 分离，完全通过 Presenter 通信。View 和 Presenter 共同处理视图层逻辑，Model 层负责业务逻辑。</p>
+<p>在 Github 上 Android 官方的架构示例 <a href="https://github.com/android/architecture-samples" target="_blank" rel="noopener">architecture-samples</a> 中 MVP 作为主分支坚挺了很久。我最初也是根据这个官方示例改造了自己的 MVP 架构，并且使用了很长时间。但是 MVP 模式写久了，就会给人繁琐的感觉，无处不在的接口</p>
 
         </div>
         
@@ -208,7 +206,7 @@
                 <div class="level-item">
                     <!-- <span class="is-size-6 has-text-grey has-mr-7">#</span> -->
                     <i class="fas fa-tags has-text-grey"></i>&nbsp;
-                    <a class="has-link-grey -link" href="/tags/反编译/">反编译</a>
+                    <a class="has-link-grey -link" href="/tags/Compose/">Compose</a>,&nbsp;<a class="has-link-grey -link" href="/tags/Jetpack/">Jetpack</a>
                 </div>
             </div>
         </div>
@@ -261,8 +259,8 @@
         
         
         <div class="level-end">
-            <a class="level level-item has-link-grey  article-nav-next" href="/2019/10/27/ams_init/">
-                <span class="level-item">“无处不在” 的系统核心服务 —— ActivityManagerService 启动流程解析</span>
+            <a class="level level-item has-link-grey  article-nav-next" href="/2019/11/14/box_1.1.0/">
+                <span class="level-item">Box 黑科技 —— 支持手机端反编译 ！</span>
                 <i class="level-item fas fa-chevron-right"></i>
             </a>
         </div>
@@ -316,7 +314,7 @@
                         文章
                     </p>
                     <p class="title has-text-weight-normal">
-                        7
+                        8
                     </p>
                 </a>
             </div>
@@ -326,7 +324,7 @@
                         分类
                     </p>
                     <p class="title has-text-weight-normal">
-                        5
+                        6
                     </p>
                 </a>
             </div>
@@ -336,7 +334,7 @@
                         标签
                     </p>
                     <p class="title has-text-weight-normal">
-                        8
+                        10
                     </p>
                 </a>
             </div>
@@ -400,17 +398,13 @@
                 目录
             </h3>
             <ul class="menu-list"><li>
-        <a class="is-flex" href="#前言">
+        <a class="is-flex" href="#荒芜年代-——-MVC">
         <span class="has-mr-6">1</span>
-        <span>前言</span>
+        <span>荒芜年代  —— MVC</span>
         </a></li><li>
-        <a class="is-flex" href="#Box-V0-2-0">
+        <a class="is-flex" href="#青铜年代-——-MVP">
         <span class="has-mr-6">2</span>
-        <span>Box V0.2.0</span>
-        </a></li><li>
-        <a class="is-flex" href="#最后">
-        <span class="has-mr-6">3</span>
-        <span>最后</span>
+        <span>青铜年代 —— MVP</span>
         </a></li></ul>
         </div>
     </div>
@@ -433,7 +427,7 @@
             <div class="level-start has-text-centered-mobile">
                 <a class="footer-logo is-block has-mb-6" href="/">
                 
-                    <img src="/images/logo.svg" alt="Box 黑科技 —— 支持手机端反编译 ！" height="28">
+                    <img src="/images/logo.svg" alt="Jetpack Compse 尝鲜 —— 完全不一样的开发体验" height="28">
                 
                 </a>
                 <p class="is-size-7">
