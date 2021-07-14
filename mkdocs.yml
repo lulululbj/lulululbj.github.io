@@ -1,0 +1,96 @@
+site_name: 路遥
+site_url: https://offerkiller.com/
+site_author: luyao
+site_description: luyao's blog
+
+theme:
+  name: material
+  logo: assets/icon.jpg
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: white
+      accent: blue
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: black
+      accent: blue
+      toggle:
+        icon: material/weather-night
+        name: Switch to light mode
+        
+  font:
+    text: Roboto
+    code: Roboto Mono
+    
+  language: zh
+  
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.tabs.sticky
+    #- navigation.sections
+    - navigation.top
+    - header.autohide
+    - navigation.expand
+    
+extra:
+  analytics:
+    provider: google
+    property: G-LHN9Q2701P
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/lulululbj
+    - icon: fontawesome/solid/paper-plane
+      link: mailto:sunluyao1993x@gmail.com
+  disqus: http-sunluyao-com
+      
+markdown_extensions:
+  - admonition
+  - codehilite:
+      guess_lang: false
+  - def_list
+  - footnotes
+  - meta
+  - toc:
+      permalink: true
+  - pymdownx.arithmatex
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.critic
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:pymdownx.emoji.twemoji
+      emoji_generator: !!python/name:pymdownx.emoji.to_svg
+  - pymdownx.highlight
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.magiclink:
+      repo_url_shorthand: true
+      user: squidfunk
+      repo: mkdocs-material
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.tabbed
+  - pymdownx.superfences
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+  
+nav:
+  - Android:
+    - framework:
+      - android/framework/test.md
+      - android/framework/test2.md
+      
+  - 读书笔记:
+    - Effective Java:
+      - note/Effective Java/chapter1.md
+
+      
+copyright: Copyright &copy; 2016 - 2021 luyao
